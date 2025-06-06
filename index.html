@@ -1,45 +1,43 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Brettspiel-Finder</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Brettspiel Community</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Brettspiel-Finder</h1>
-  </header>
+  <h1>Brettspiel Community</h1>
+  <img src="logo.png" alt="Logo" style="width: 150px;">
 
-  <img class="logo" src="logo.png" alt="Logo" />  
-  
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>  
-  <script src="script.js"></script>
- 
+  <!-- LOGIN -->
   <form id="login-form">
     <h2>Login</h2>
     <input type="email" id="email" placeholder="E-Mail" required />
     <input type="password" id="password" placeholder="Passwort" required />
-    <button type="submit">Einloggen</button>
+    <button type="submit">Login</button>
   </form>
-<div id="app" style="display: none;">
-  <form id="match-form">
+
+  <!-- HAUPTINHALT – nur nach Login sichtbar -->
+  <div id="app" style="display: none;">
     <h2>Mitspieler finden</h2>
-    <input type="text" id="region" placeholder="Region" required />
-    <input type="text" id="spiel" placeholder="Brettspiel" required />
-    <button type="button" onclick="findPlayers()">Suchen</button>
-  </form>
+    <form id="match-form">
+      <input type="text" id="region" placeholder="Region" required>
+      <input type="text" id="spiel" placeholder="Brettspiel" required>
+      <button type="submit">Suchen</button>
+    </form>
 
-  <form id="recommend-form">
-    <h2>Spiel-Empfehlung</h2>
-    <input type="number" id="spieleranzahl" placeholder="Anzahl Spieler" required />
-    <input type="number" id="dauer" placeholder="Spieldauer (min)" required />
-    <button type="button" onclick="recommendGame()">Empfehlen</button>
-  </form>
-<div id="output"></div>
+    <h2>Spiel empfehlen lassen</h2>
+    <form id="recommend-form">
+      <input type="number" id="spieleranzahl" placeholder="Spieleranzahl" required>
+      <input type="number" id="dauer" placeholder="Dauer in Minuten" required>
+      <button type="submit">Empfehlen</button>
+    </form>
+
+    <div id="output"></div>
   </div>
-  <div id="output"></div>
 
-
+  <!-- Supabase & dein Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

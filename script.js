@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('email').value;
-  const passwort = document.getElementById('passwort').value;
+  const password = document.getElementById('password').value;
 
   const { data, error } = await supabase.auth.signInWithPassword({ email, passwort });
 

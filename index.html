@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Brettspiel-Finder</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Brettspiel-Finder</h1>
+  </header>
+
+  <img class="logo" src="logo.png" alt="Logo" />
+
+  <form id="login-form">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="E-Mail" required />
+    <input type="password" id="password" placeholder="Passwort" required />
+    <button type="submit">Einloggen</button>
+  </form>
+
+  <form id="match-form">
+    <h2>Mitspieler finden</h2>
+    <input type="text" id="region" placeholder="Region" required />
+    <input type="text" id="spiel" placeholder="Brettspiel" required />
+    <button type="button" onclick="findPlayers()">Suchen</button>
+  </form>
+
+  <form id="recommend-form">
+    <h2>Spiel-Empfehlung</h2>
+    <input type="number" id="spieleranzahl" placeholder="Anzahl Spieler" required />
+    <input type="number" id="dauer" placeholder="Spieldauer (min)" required />
+    <button type="button" onclick="recommendGame()">Empfehlen</button>
+  </form>
+
+  <div id="output"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    // Supabase Initialisierung – bitte mit deinen echten Daten ersetzen
+    const supabaseUrl = 'https://oywfzyfzpencghrpqfdk.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d2Z6eWZ6cGVuY2docnBxZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTc4ODUsImV4cCI6MjA2NDc5Mzg4NX0.OdMh5TH47gDdFYkWYQELxruXvdjhyLuMRfRjFJ1tywM';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

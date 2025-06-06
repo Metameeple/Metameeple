@@ -1,0 +1,33 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f3f3f3;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+header {
+  background-color: #4CAF50;
+  color: white;
+  padding: 1em;
+}
+
+img.logo {
+  width: 100px;
+  margin: 20px auto;
+}
+
+form {
+  margin: 20px auto;
+  padding: 1em;
+  background: white;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 8px;
+}
+
+input, select, button {
+  width: 90%;
+  padding: 0.5em;
+  margin: 0.5em 0;
+}

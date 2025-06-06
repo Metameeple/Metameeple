@@ -1,3 +1,8 @@
+// === Supabase Initialisierung ===
+const supabaseUrl = 'https://oywfzyfzpencghrpqfdk.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d2Z6eWZ6cGVuY2docnBxZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTc4ODUsImV4cCI6MjA2NDc5Mzg4NX0.OdMh5TH47gDdFYkWYQELxruXvdjhyLuMRfRjFJ1tywM';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
 window.addEventListener('DOMContentLoaded', async () => {
   const { data: { session } } = await supabase.auth.getSession();
   toggleUI(session);
@@ -15,10 +20,7 @@ function toggleUI(session) {
     loginForm.style.display = 'block';
   }
 }
-// === Supabase Initialisierung ===
-const supabaseUrl = 'https://oywfzyfzpencghrpqfdk.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d2Z6eWZ6cGVuY2docnBxZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTc4ODUsImV4cCI6MjA2NDc5Mzg4NX0.OdMh5TH47gDdFYkWYQELxruXvdjhyLuMRfRjFJ1tywM';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
 
 // === Login-Formular behandeln ===
 document.getElementById('login-form').addEventListener('submit', async (e) => {

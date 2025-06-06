@@ -11,7 +11,16 @@
     <h1>Brettspiel-Finder</h1>
   </header>
 
-  <img class="logo" src="logo.png" alt="Logo" />
+  <img class="logo" src="logo.png" alt="Logo" />  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>  
+  <script src="script.js"></script>
+  <script>
+    // Supabase Initialisierung – bitte mit deinen echten Daten ersetzen
+    const supabaseUrl = 'https://oywfzyfzpencghrpqfdk.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d2Z6eWZ6cGVuY2docnBxZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTc4ODUsImV4cCI6MjA2NDc5Mzg4NX0.OdMh5TH47gDdFYkWYQELxruXvdjhyLuMRfRjFJ1tywM';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+  </script>
+
 
   <form id="login-form">
     <h2>Login</h2>
@@ -37,13 +46,6 @@
   </div>
   <div id="output"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script>
-    // Supabase Initialisierung – bitte mit deinen echten Daten ersetzen
-    const supabaseUrl = 'https://oywfzyfzpencghrpqfdk.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d2Z6eWZ6cGVuY2docnBxZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTc4ODUsImV4cCI6MjA2NDc5Mzg4NX0.OdMh5TH47gDdFYkWYQELxruXvdjhyLuMRfRjFJ1tywM';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-  </script>
-  <script src="script.js"></script>
+
 </body>
 </html>

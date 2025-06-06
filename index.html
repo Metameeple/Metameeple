@@ -19,7 +19,7 @@
     <input type="password" id="password" placeholder="Passwort" required />
     <button type="submit">Einloggen</button>
   </form>
-
+<div id="app" style="display: none;">
   <form id="match-form">
     <h2>Mitspieler finden</h2>
     <input type="text" id="region" placeholder="Region" required />
@@ -33,7 +33,8 @@
     <input type="number" id="dauer" placeholder="Spieldauer (min)" required />
     <button type="button" onclick="recommendGame()">Empfehlen</button>
   </form>
-
+<div id="output"></div>
+  </div>
   <div id="output"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>

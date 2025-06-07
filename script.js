@@ -174,3 +174,4 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
   if (error) {
     document.getElementById('output').innerText = 'Fehler: ' + error.message;
    
+  }

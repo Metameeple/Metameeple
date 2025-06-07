@@ -1,51 +1,54 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Brettspiel Community</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>Brettspiel Community</h1>
-  <img src="logo.png" alt="Logo" style="width: 150px;">
+  <img src="logo.png" alt="Logo" style="width: 150px;" />
 
-  <!-- LOGIN -->
-  <form id="login-form">
-    <h2>Login</h2>
-    <input type="email" id="email" placeholder="E-Mail" required>
-    <input type="password" id="password" placeholder="Passwort" required>
-    <button type="submit">Login</button>
-  </form>
- 
   <!-- REGISTRIERUNG -->
-  <form id="signup-form">
+  <form id="register-form">
     <h2>Registrieren</h2>
-    <input type="email" id="signup-email" placeholder="E-Mail" required>
-    <input type="password" id="signup-password" placeholder="Passwort" required>
+    <input type="email" id="register-email" placeholder="E-Mail" required />
+    <input type="password" id="register-password" placeholder="Passwort" required />
+    <input type="text" id="register-region" placeholder="Region" required />
+    <input type="text" id="register-favorite-game" placeholder="Lieblingsspiel" required />
     <button type="submit">Registrieren</button>
   </form>
-  
-  <!-- HAUPTINHALT -->
-  <div id="app" style="display: none;">
+
+  <!-- LOGIN -->
+  <form id="login-form" style="margin-top: 20px;">
+    <h2>Login</h2>
+    <input type="email" id="login-email" placeholder="E-Mail" required />
+    <input type="password" id="login-password" placeholder="Passwort" required />
+    <button type="submit">Login</button>
+  </form>
+
+  <!-- HAUPTINHALT – nur nach Login sichtbar -->
+  <div id="app" style="display: none; margin-top: 20px;">
+    <button id="logout-btn" style="float: right;">Ausloggen</button>
     <h2>Mitspieler finden</h2>
     <form id="match-form">
-      <input type="text" id="region" placeholder="Region" required>
-      <input type="text" id="spiel" placeholder="Brettspiel" required>
+      <input type="text" id="region" placeholder="Region" required />
+      <input type="text" id="spiel" placeholder="Brettspiel" required />
       <button type="submit">Suchen</button>
-      <button id="logout-btn">Logout</button>
     </form>
 
     <h2>Spiel empfehlen lassen</h2>
     <form id="recommend-form">
-      <input type="number" id="spieleranzahl" placeholder="Spieleranzahl" required>
-      <input type="number" id="dauer" placeholder="Dauer in Minuten" required>
+      <input type="number" id="spieleranzahl" placeholder="Spieleranzahl" required />
+      <input type="number" id="dauer" placeholder="Dauer in Minuten" required />
       <button type="submit">Empfehlen</button>
     </form>
 
-    <div id="output"></div>
+    <div id="output" style="white-space: pre-wrap; margin-top: 10px;"></div>
   </div>
 
-  <!-- Supabase & JS -->
+  <!-- Supabase & dein Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module" src="script.js"></script>
 </body>
 </html>

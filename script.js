@@ -1,93 +1,176 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-const supabaseUrl = 'https://oywfzyfzpencghrpqfdk.supabase.co'; 
+const supabaseUrl = 'https://oywfzyfzpencghrpqfdk.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d2Z6eWZ6cGVuY2docnBxZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTc4ODUsImV4cCI6MjA2NDc5Mzg4NX0.OdMh5TH47gDdFYkWYQELxruXvdjhyLuMRfRjFJ1tywM';
+
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// UI umschalten
+// UI basierend auf Login-Status umschalten
 function toggleUI(session) {
-  document.getElementById('app').style.display = session ? 'block' : 'none';
-  document.getElementById('login-form').style.display = session ? 'none' : 'block';
-  document.getElementById('signup-form').style.display = session ? 'none' : 'block';
+  const app = document.getElementById('app');
+  const loginForm = document.getElementById('login-form');
+  const registerForm = document.getElementById('register-form');
+
+  if (session) {
+    app.style.display = 'block';
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'none';
+  } else {
+    app.style.display = 'none';
+    loginForm.style.display = 'block';
+    registerForm.style.display = 'block';
+  }
 }
 
-// Beim Laden prüfen
+// Seite geladen → Login-Status prüfen
 document.addEventListener('DOMContentLoaded', async () => {
   const { data: { session } } = await supabase.auth.getSession();
   toggleUI(session);
 });
 
 // REGISTRIERUNG
-document.getElementById('signup-form').addEventListener('submit', async (e) => {
+document.getElementById('register-form').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const email = document.getElementById('signup-email').value;
-  const password = document.getElementById('signup-password').value;
 
-  const { error } = await supabase.auth.signUp({ email, password });
+  const email = document.getElementById('register-email').value;
+  const password = document.getElementById('register-password').value;
+  const region = document.getElementById('register-region').value;
+  const favorite_game = document.getElementById('register-favorite-game').value;
 
+  // User registrieren
+  const { data, error } = await supabase.auth.signUp({ email, password });
   if (error) {
-    alert('Fehler bei Registrierung: ' + error.message);
-  } else {
-    alert('Registrierung erfolgreich. Bitte jetzt einloggen.');
+    alert('Registrierung fehlgeschlagen: ' + error.message);
+    return;
   }
+
+  alert('Registrierung erfolgreich! Bitte logge dich jetzt ein.');
+
+  // Profil-Daten in Tabelle profiles speichern
+  // Warte bis user-Objekt verfügbar (registrierung ohne sofortige Anmeldung)
+  // User muss sich nochmal einloggen, daher hier noch nicht speichern
+  // Stattdessen Profil wird erst nach Login eingetragen (siehe Login-Event)
+
+  // Formular zurücksetzen
+  e.target.reset();
 });
 
 // LOGIN
 document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
 
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
     alert('Login fehlgeschlagen: ' + error.message);
-  } else {
-    toggleUI(data.session);
+    return;
   }
+
+  // Nach Login Profil prüfen und ggf. anlegen/aktualisieren
+  const user = data.user;
+  const profileCheck = await supabase.from('profiles').select('*').eq('id', user.id).single();
+
+  if (profileCheck.error || !profileCheck.data) {
+    // Kein Profil vorhanden → Daten aus Registrierung nicht gespeichert
+    // Bitte User nach Region & Lieblingsspiel fragen (Popup oder Formular)
+    // Hier einfach ein prompt als Beispiel:
+    const region = prompt('Bitte gib deine Region ein:');
+    const favorite_game = prompt('Bitte gib dein Lieblingsspiel ein:');
+
+    if (!region || !favorite_game) {
+      alert('Region und Lieblingsspiel sind erforderlich.');
+      await supabase.auth.signOut();
+      toggleUI(null);
+      return;
+    }
+
+    // Profil speichern
+    const { error: insertError } = await supabase.from('profiles').insert({
+      id: user.id,
+      email: user.email,
+      region,
+      favorite_game
+    });
+
+    if (insertError) {
+      alert('Fehler beim Speichern des Profils: ' + insertError.message);
+      await supabase.auth.signOut();
+      toggleUI(null);
+      return;
+    }
+  }
+
+  toggleUI(data.session);
+
+  // Formulare zurücksetzen
+  document.getElementById('login-form').reset();
+  document.getElementById('register-form').reset();
 });
 
-// Mitspieler suchen
+// Ausloggen
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  toggleUI(null);
+  document.getElementById('output').innerText = '';
+});
+
+// Mitspieler finden
 document.getElementById('match-form').addEventListener('submit', async (e) => {
   e.preventDefault();
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    alert('Bitte zuerst einloggen.');
+    return;
+  }
+
   const region = document.getElementById('region').value;
   const spiel = document.getElementById('spiel').value;
 
-  const { data, error } = await supabase
-    .from('spielersuche')
-    .select('*')
+  // Suche nach registrierten Usern, deren Profilregion und Lieblingsspiel passen
+  const { data: matches, error } = await supabase
+    .from('profiles')
+    .select('id, email, region, favorite_game')
     .eq('region', region)
-    .eq('spiel', spiel);
+    .eq('favorite_game', spiel);
 
-  document.getElementById('output').innerText = error
-    ? 'Fehler: ' + error.message
-    : data.length > 0
-      ? 'Gefundene Mitspieler:\n' + data.map(m => `- ${m.region}, ${m.spiel}`).join('\n')
-      : 'Keine Mitspieler gefunden.';
+  if (error) {
+    document.getElementById('output').innerText = 'Fehler: ' + error.message;
+    return;
+  }
+
+  if (matches.length === 0) {
+    document.getElementById('output').innerText = 'Keine passenden Mitspieler gefunden.';
+  } else {
+    document.getElementById('output').innerText = 'Gefundene Mitspieler:\n' + matches.map(m => `- ${m.email} (${m.region}, Lieblingsspiel: ${m.favorite_game})`).join('\n');
+  }
 });
 
 // Spiel empfehlen
 document.getElementById('recommend-form').addEventListener('submit', async (e) => {
   e.preventDefault();
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    alert('Bitte zuerst einloggen.');
+    return;
+  }
+
   const anzahl = parseInt(document.getElementById('spieleranzahl').value);
   const dauer = parseInt(document.getElementById('dauer').value);
 
-  let empfehlung = 'Keine Empfehlung gefunden.';
+  // Suche in spielempfehlungen-Tabelle
+  const { data: recommendations, error } = await supabase
+    .from('spielempfehlungen')
+    .select('spiel')
+    .gte('min_spieler', anzahl)
+    .lte('max_spieler', anzahl)
+    .gte('min_dauer', dauer)
+    .lte('max_dauer', dauer);
 
-  if (anzahl <= 2 && dauer <= 30) empfehlung = 'Empfehlung: Patchwork';
-  else if (anzahl <= 4 && dauer <= 60) empfehlung = 'Empfehlung: Codenames';
-  else if (anzahl > 4 && dauer >= 60) empfehlung = 'Empfehlung: Werwölfe von Düsterwald';
-  else if (anzahl >= 3 && dauer <= 45) empfehlung = 'Empfehlung: Azul';
-
-  document.getElementById('output').innerText = empfehlung;
-});
-
-document.getElementById('logout-btn').addEventListener('click', async () => {
-  const { error } = await supabase.auth.signOut();
   if (error) {
-    alert('Fehler beim Ausloggen: ' + error.message);
-  } else {
-    toggleUI(null);
-    alert('Du wurdest erfolgreich ausgeloggt.');
-  }
-});
+    document.getElementById('output').innerText = 'Fehler: ' + error.message;
+   

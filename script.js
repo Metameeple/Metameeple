@@ -179,6 +179,5 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
   } else {
     document.getElementById('output').innerText = 'Empfohlene Spiele:\n' + recommendations.map(r => `- ${r.spiel}`).join('\n');
   }
-});
-  
+ 
 });

@@ -1,16 +1,18 @@
 /* Grundlegendes Styling */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 700px;
-  margin: 2rem auto;
-  padding: 0 1.5rem;
   background-color: #f5f7fa;
   color: #333;
+  margin: 0;
+  padding: 2rem 1.5rem;
+  display: flex;
+  justify-content: center;  /* Body-Inhalt horizontal zentrieren */
 }
 
-h1, h2 {
-  color: #2c3e50;
-  margin-bottom: 1rem;
+/* Haupt-Container für die App */
+#app-container {
+  max-width: 700px;
+  width: 100%;
 }
 
 /* Header mit Flexbox für Überschrift und Logout-Button */
@@ -49,20 +51,23 @@ img[alt="Logo"] {
   height: auto;
 }
 
-/* Formulare */
-form {
+/* Container für jede Funktion (Formulare, Output) */
+.function-block {
   background-color: white;
-  padding: 1.8rem 2rem;
+  padding: 2rem 2.5rem;
   border-radius: 8px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
-  margin-bottom: 2.5rem;
-   max-width: 100%;
+  margin-bottom: 3rem;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center; /* Optional: zentriert Textinhalt in den Blöcken */
 }
 
-form h2 {
+.function-block h2 {
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   font-weight: 600;
+  color: #2c3e50;
 }
 
 /* Inputs */
@@ -109,13 +114,11 @@ button[type="submit"]:hover {
 /* Output Bereich */
 #output {
   white-space: pre-line;
-  background-color: white;
-  padding: 1.5rem 2rem;
-  border-radius: 8px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
   min-height: 5rem;
-  margin-bottom: 2.5rem;
   font-size: 1rem;
   color: #2c3e50;
   user-select: text;
+  /* output wird jetzt durch parent container formatiert */
+  margin-top: 1rem;
+  text-align: left;
 }

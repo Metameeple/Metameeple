@@ -1,33 +1,120 @@
+/* Grundlegendes Styling */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f3f3f3;
-  margin: 0;
-  padding: 0;
-  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  background-color: #f5f7fa;
+  color: #333;
 }
 
+h1, h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+/* Header mit Flexbox für Überschrift und Logout-Button */
 header {
-  background-color: #4CAF50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+button#logout-button {
+  background-color: #e74c3c;
+  border: none;
   color: white;
-  padding: 1em;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
 }
 
-img.logo {
-  width: 100px;
-  margin: 20px auto;
+button#logout-button:hover {
+  background-color: #c0392b;
 }
 
+/* Logo zentrieren und Abstand */
+img[alt="Logo"] {
+  display: block;
+  margin: 0 auto 2rem;
+  width: 150px;
+  height: auto;
+}
+
+/* Formulare */
 form {
-  margin: 20px auto;
-  padding: 1em;
-  background: white;
-  width: 90%;
-  max-width: 400px;
+  background-color: white;
+  padding: 1.2rem 1.5rem;
   border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
 }
 
-input, select, button {
-  width: 90%;
-  padding: 0.5em;
-  margin: 0.5em 0;
+form h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+/* Inputs */
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  margin-top: 0.4rem;
+  margin-bottom: 1rem;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+/* Buttons */
+button[type="submit"] {
+  width: 100%;
+  padding: 0.65rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #2980b9;
+}
+
+/* Output Bereich */
+#output {
+  white-space: pre-line;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  min-height: 4rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  color: #2c3e50;
+  user-select: text;
 }

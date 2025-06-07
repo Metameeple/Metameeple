@@ -53,9 +53,21 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
   }
 });
 // Nach erfolgreicher Registrierung
-await supabase
-  .from('profiles')
-  .insert([{ id: data.user.id, email }]);
+document.getElementById('profile-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const username = document.getElementById('username').value;
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const { error } = await supabase
+    .from('profiles')
+    .upsert({ id: user.id, username });
+
+  if (error) {
+    alert('Fehler beim Speichern: ' + error.message);
+  } else {
+    alert('Profil gespeichert!');
+  }
+});
 
 // Mitspieler finden
 document.getElementById('match-form').addEventListener('submit', async (e) => {

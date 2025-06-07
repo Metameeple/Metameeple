@@ -174,7 +174,11 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
   if (error) {
     document.getElementById('output').innerText = 'Fehler: ' + error.message;
   }
-  else { document.getElementById('output').innerText = spiel
-       }
-    
+  if (!recommendations || recommendations.length === 0) {
+    document.getElementById('output').innerText = 'Keine Empfehlungen gefunden.';
+  } else {
+    document.getElementById('output').innerText = 'Empfohlene Spiele:\n' + recommendations.map(r => `- ${r.spiel}`).join('\n');
+  }
+});
+  
 });

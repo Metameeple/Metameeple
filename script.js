@@ -166,10 +166,10 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
   const { data: recommendations, error } = await supabase
     .from('spielempfehlungen')
     .select('spiel')
-    .gte('min_spieler', anzahl)
-    .lte('max_spieler', anzahl)
-    .gte('min_dauer', dauer)
-    .lte('max_dauer', dauer);
+  .lte('max_spieler', anzahl)      // max_spieler ≥ anzahl
+  .gte('min_spieler', anzahl)      // min_spieler ≤ anzahl
+  .lte('max_dauer', dauer)          // max_dauer ≥ dauer
+  .gte('min_dauer', dauer);         // min_dauer ≤ dauer
 
   if (error) {
     document.getElementById('output').innerText = 'Fehler: ' + error.message;

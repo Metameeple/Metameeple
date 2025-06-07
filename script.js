@@ -175,3 +175,4 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
     document.getElementById('output').innerText = 'Fehler: ' + error.message;
    
   }
+});

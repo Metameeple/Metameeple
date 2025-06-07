@@ -52,6 +52,10 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     alert('Registrierung erfolgreich! Bitte einloggen.');
   }
 });
+// Nach erfolgreicher Registrierung
+await supabase
+  .from('profiles')
+  .insert([{ id: data.user.id, email }]);
 
 // Mitspieler finden
 document.getElementById('match-form').addEventListener('submit', async (e) => {

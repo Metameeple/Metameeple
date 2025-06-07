@@ -1,78 +1,42 @@
-/* Grundlegendes Styling */
+/* global box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f5f7fa;
   color: #333;
   margin: 2rem auto;
   padding: 0 1.5rem;
-
-  /* zentriert den gesamten Inhalt */
+  
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  box-sizing: border-box;
   max-width: 100%;
 }
 
-/* Optional: ein Container um den Inhalt, falls im HTML vorhanden, sonst direkt für form und output */
-
-/* Formulare */
-form {
+form, #output {
   background-color: white;
-  padding: 1.8rem 2rem;
   border-radius: 8px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
-  margin-bottom: 2.5rem;
-  
-  /* Breite festlegen und mittig ausrichten */
-  width: 100%;
   max-width: 700px;
-  box-sizing: border-box;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;  /* damit es responsive bleibt */
+  padding: 2rem; /* gleichmäßiges Padding */
+  margin: 0  auto 2.5rem auto; /* zentriert und margin unten */
 }
 
-form h2 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-weight: 600;
-}
-
-/* Output Bereich */
-#output {
-  white-space: pre-line;
-  background-color: white;
-  padding: 1.5rem 2rem;
-  border-radius: 8px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
-  min-height: 5rem;
-  margin-bottom: 2.5rem;
-  font-size: 1rem;
-  color: #2c3e50;
-  user-select: text;
-
-  /* Breite festlegen und mittig ausrichten */
-  width: 100%;
-  max-width: 700px;
-  box-sizing: border-box;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Header mit Flexbox für Überschrift und Logout-Button */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-
-  /* Breite fixieren und zentrieren */
-  width: 100%;
   max-width: 700px;
-  box-sizing: border-box;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  margin: 0 auto 2rem auto;
+  padding: 0 2rem; /* optional: horizontalen Abstand an Header-Seiten */
 }
 
 header h1 {
@@ -80,30 +44,8 @@ header h1 {
   margin: 0;
 }
 
-button#logout-button {
-  background-color: #e74c3c;
-  border: none;
-  color: white;
-  padding: 0.5rem 1.2rem;
-  font-size: 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.25s ease;
-}
+/* Inputs & Buttons bleiben gleich... */
 
-button#logout-button:hover {
-  background-color: #c0392b;
-}
-
-/* Logo zentrieren und Abstand */
-img[alt="Logo"] {
-  display: block;
-  margin: 0 auto 2rem;
-  width: 150px;
-  height: auto;
-}
-
-/* Inputs */
 input[type="email"],
 input[type="password"],
 input[type="text"],
@@ -126,7 +68,6 @@ input[type="number"]:focus {
   outline: none;
 }
 
-/* Buttons */
 button[type="submit"] {
   width: 100%;
   padding: 0.65rem;
@@ -142,11 +83,5 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   background-color: #2980b9;
-}
-
-/* Überschriften */
-h1, h2 {
-  color: #2c3e50;
-  margin-bottom: 1rem;
 }
 

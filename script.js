@@ -81,3 +81,13 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
 
   document.getElementById('output').innerText = empfehlung;
 });
+
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    alert('Fehler beim Ausloggen: ' + error.message);
+  } else {
+    toggleUI(null);
+    alert('Du wurdest erfolgreich ausgeloggt.');
+  }
+});

@@ -171,6 +171,9 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
   .lte('max_dauer', dauer)          // max_dauer ≥ dauer
   .gte('min_dauer', dauer);         // min_dauer ≤ dauer
 
+console.log('Empfehlungen:', recommendations);
+console.log('Fehler:', error);
+
   if (error) {
     document.getElementById('output').innerText = 'Fehler: ' + error.message;
   }

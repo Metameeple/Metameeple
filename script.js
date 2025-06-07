@@ -39,6 +39,20 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   }
 });
 
+document.getElementById('register-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('reg-email').value;
+  const password = document.getElementById('reg-password').value;
+
+  const { data, error } = await supabase.auth.signUp({ email, password });
+
+  if (error) {
+    alert('Registrierung fehlgeschlagen: ' + error.message);
+  } else {
+    alert('Registrierung erfolgreich! Bitte einloggen.');
+  }
+});
+
 // Mitspieler finden
 document.getElementById('match-form').addEventListener('submit', async (e) => {
   e.preventDefault();

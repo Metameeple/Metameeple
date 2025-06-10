@@ -17,18 +17,17 @@ const accountView = document.getElementById('account-view');
 // --- KERNFUNKTIONEN ---
 
 // Wird aufgerufen, wenn sich der Auth-Status ändert (Login/Logout)
+// ERSETZE die alte handleAuthChange Funktion mit dieser:
 async function handleAuthChange(session) {
-    const isVisible = appDiv.style.display === 'block';
-
     if (session) {
+        // Nutzer ist eingeloggt
         appDiv.style.display = 'block';
         loginForm.style.display = 'none';
         registerForm.style.display = 'none';
-        // Nur laden, wenn die App gerade sichtbar wird
-        if (!isVisible) {
-            await loadDashboard();
-        }
+        // Lade immer die neuesten Daten, wenn der Nutzer eingeloggt ist
+        await loadDashboard(); 
     } else {
+        // Nutzer ist ausgeloggt
         appDiv.style.display = 'none';
         loginForm.style.display = 'block';
         registerForm.style.display = 'block';
@@ -128,11 +127,24 @@ async function saveAccountChanges() {
 
 // --- EVENT LISTENERS ---
 
-document.addEventListener('DOMContentLoaded', () => {
+// ERSETZE den kompletten DOMContentLoaded-Listener mit diesem:
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. SOFORTIGER CHECK BEIM LADEN DER SEITE
+    // Wir warten aktiv auf die allererste Information zur Session.
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        handleAuthChange(session);
+    } catch (error) {
+        console.error("Fehler beim Abrufen der initialen Session:", error);
+    }
+
+    // 2. LISTENER FÜR ZUKÜNFTIGE ÄNDERUNGEN
+    // Dieser Listener reagiert, wenn sich der Zustand ÄNDERT (z.B. durch Klick auf Login/Logout).
     supabase.auth.onAuthStateChange((_event, session) => {
         handleAuthChange(session);
     });
 
+    // Hier bleiben alle anderen Event Listener, die du schon hattest
     // Account-Buttons
     document.getElementById('account-btn').addEventListener('click', showAccountView);
     document.getElementById('back-to-main-btn').addEventListener('click', () => showView(appMainContent));
@@ -140,23 +152,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cancel-edit-btn').addEventListener('click', () => toggleEditMode(false));
     document.getElementById('save-account-btn').addEventListener('click', saveAccountChanges);
     
-    // Bestehende Event Listeners
-    // ... (Hier kommen die Listener für Login, Register, Logout, Chat, Empfehlungen etc. rein)
-    // Die meisten davon habe ich unten wieder eingefügt.
+    // Formular-Listener
+    document.getElementById('register-form').addEventListener('submit', async (e) => { /* ... dein Code ... */ });
+    document.getElementById('login-form').addEventListener('submit', async (e) => { /* ... dein Code ... */ });
+    document.getElementById('logout-btn').addEventListener('click', async () => { await supabase.auth.signOut(); });
+    document.getElementById('recommend-form').addEventListener('submit', async (e) => { /* ... dein Code ... */ });
+    document.getElementById('match-form').addEventListener('submit', async (e) => { /* ... dein Code ... */ });
+    document.getElementById('chat-form').addEventListener('submit', async (e) => { /* ... dein Code ... */ });
+    document.getElementById('ai-form').addEventListener('submit', async (e) => { /* ... dein Code ... */ });
 });
-
-// HINWEIS: Hier folgen alle deine anderen Funktionen (checkForNewMessages, openChat, displayMessage, etc.)
-// und die Event Listener für die Formulare. Ich habe sie hier zur Vollständigkeit eingefügt.
-
-// --- Bestehende Funktionen und Listener (zur Vollständigkeit) ---
-async function checkForNewMessages() { /* ... unverändert ... */ }
-async function openChat(receiverId, receiverNickname) { /* ... unverändert ... */ }
-function displayMessage(message, currentUserId) { /* ... unverändert ... */ }
-function closeChat() { /* ... unverändert ... */ }
-document.getElementById('register-form').addEventListener('submit', async (e) => { /* ... unverändert ... */ });
-document.getElementById('login-form').addEventListener('submit', async (e) => { /* ... unverändert ... */ });
-document.getElementById('logout-btn').addEventListener('click', async () => { await supabase.auth.signOut(); });
-document.getElementById('recommend-form').addEventListener('submit', async (e) => { /* ... unverändert ... */ });
-document.getElementById('match-form').addEventListener('submit', async (e) => { /* ... unverändert ... */ });
-document.getElementById('chat-form').addEventListener('submit', async (e) => { /* ... unverändert ... */ });
-document.getElementById('ai-form').addEventListener('submit', async (e) => { /* ... unverändert ... */ });

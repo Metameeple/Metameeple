@@ -28,73 +28,54 @@
         <button type="submit">Login</button>
     </form>
 
-        <header class="app-header">
-        <h2 id="welcome-message">Willkommen!</h2>
-        <div>
-            <button id="account-btn">Mein Account</button>
-            <button id="logout-btn" style="margin-left: 10px;">Ausloggen</button>
-        </div>
-    </header>
+    <div id="app" style="display: none; margin-top: 20px;">
+        <button id="logout-btn" style="float: right;">Ausloggen</button>
+       
+        <div id="inbox-notifications"></div>
 
-    <div id="app-main-content">
-        
-        <div class="feature-box">
-            <h3>Letzte Chats</h3>
-            <ul id="chat-history-list">
-                </ul>
-        </div>
-        
-        <div class="feature-box">
-            <h3>Spiel empfehlen lassen</h3>
-            <form id="recommend-form">
-                <input type="number" id="spieleranzahl" placeholder="Spieleranzahl" required />
-                <input type="number" id="dauer" placeholder="Max. Dauer in Minuten" required />
-                <input type="number" id="min-age" placeholder="Mindestalter" required />
-                <button type="submit">Empfehlen</button>
-            </form>
-            <div id="output-recommend" class="output-container"></div>
-        </div>
-        
-        <div class="feature-box">
-            <h3>Mitspieler finden</h3>
-            <form id="match-form">
-                <input type="text" id="region" placeholder="Region" required />
-                <input type="text" id="spiel" placeholder="Brettspiel" required />
-                <button type="submit">Suchen</button>
-            </form>
-            <div id="output-match" class="output-container"></div>
-        </div>
+        <h3>Spiel empfehlen lassen</h3>
+        <form id="recommend-form">
+            <input type="number" id="spieleranzahl" placeholder="Spieleranzahl" required />
+            <input type="number" id="dauer" placeholder="Max. Dauer in Minuten" required />
+            <input type="number" id="min-age" placeholder="Mindestalter" required />
+            <button type="submit">Empfehlen</button>
+        </form>
+        <div id="output-recommend" class="output-container"></div>
 
-        <div class="feature-box">
-            <h3>KI-Spiele-Generator</h3>
-            <form id="ai-form">
-                <label for="equipment-input">Welches Spielmaterial hast du zur Verfügung?</label>
-                <textarea id="equipment-input" rows="4" placeholder="z.B. 6 Würfel, 1 Satz Spielkarten..." required></textarea>
-                <button type="submit">Vorschlag generieren</button>
-            </form>
-            <div id="ai-output" class="output-container" style="margin-top: 1rem; display: none;">
-                <div id="ai-loading" style="display: none;">Denke über kreative Ideen nach... 🧠</div>
-                <div id="ai-result"></div>
-            </div>
-        </div>
+        <h3 style="margin-top: 40px;">KI-Spiele-Generator</h3>
+        
+<form id="ai-form">
+    <label for="equipment-input">Welches Spielmaterial hast du?</label>
+    <textarea 
+        id="equipment-input" 
+        rows="4" 
+        placeholder="z.B. 6 Würfel, 1 Satz Spielkarten, 50 Münzen, 1 leeres Blatt Papier..."
+        required></textarea>
+    <button type="submit">Vorschlag generieren</button>
+</form>
+<div id="ai-output" class="output-container" style="display: none;">
+    <div id="ai-loading" style="display: none;">Generiere kreative Ideen... 🧠</div>
+    <div id="ai-result"></div>
+</div>
+
+        <h3 style="margin-top: 40px;">Mitspieler finden</h3>
+        <form id="match-form">
+            <input type="text" id="region" placeholder="Region" required />
+            <input type="text" id="spiel" placeholder="Brettspiel" required />
+            <button type="submit">Suchen</button>
+        </form>
+        <div id="output-match" class="output-container"></div>
     </div>
 
-    <div id="account-view" class="feature-box" style="display: none;">
-        <button id="back-to-main-btn" style="float: right;">Zurück</button>
-        <h3>Account-Daten</h3>
-        
-        <div id="account-display-mode">
-            <p><strong>Nickname:</strong> <span id="display-nickname"></span></p>
-            <p><strong>E-Mail:</strong> <span id="display-email"></span></p>
-            <button id="edit-account-btn">Daten bearbeiten</button>
-        </div>
-
-        <div id="account-edit-mode" style="display: none;">
-            <label for="edit-nickname">Nickname:</label>
-            <input type="text" id="edit-nickname" required />
-            <p><strong>E-Mail:</strong> <span id="edit-email-display"></span> (kann nicht geändert werden)</p>
-            <button id="save-account-btn">Speichern</button>
-            <button id="cancel-edit-btn" class="secondary-btn">Abbrechen</button>
+    <div id="chat-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-content">
+            <button id="chat-close-btn" class="modal-close-btn">&times;</button>
+            <h3 id="chat-with-user">Chat</h3>
+            <div id="chat-messages"></div>
+            <form id="chat-form">
+                <input type="text" id="chat-input" placeholder="Nachricht schreiben..." autocomplete="off" required />
+                <button type="submit">Senden</button>
+            </form>
         </div>
     </div>
 

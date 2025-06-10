@@ -12,28 +12,27 @@ async function checkForNewMessages() {
     if (!user) return;
 
     const inboxDiv = document.getElementById('inbox-notifications');
-    console.log("--- Postfach-Check gestartet ---"); // Zeigt, dass die Funktion läuft
-
+    
+    // HIER IST DIE KORREKTUR IN DER SELECT-ANWEISUNG
     const { data: messages, error } = await supabase
         .from('messages')
-        .select('sender_id, profiles ( id, nickname )')
+        .select('sender_id, profiles!sender_id ( id, nickname )') // Eindeutige Beziehung angegeben!
         .eq('receiver_id', user.id)
         .eq('is_read', false);
 
-    // DIESER DEBUG-BLOCK IST ENTSCHEIDEND
-    console.log("Abgerufene Nachrichten-Objekte:", messages);
-    console.log("Fehler bei der Abfrage:", error);
-    console.log("---------------------------------");
+    if (error) {
+        // Dieser Fehler sollte jetzt nicht mehr auftreten
+        console.error("Fehler bei der Postfach-Abfrage:", error);
+        inboxDiv.innerHTML = 'Fehler beim Laden des Postfachs.';
+        return;
+    }
 
-
-    if (error || !messages || messages.length === 0) {
+    if (!messages || messages.length === 0) {
         inboxDiv.innerHTML = ''; // Keine Nachrichten, Postfach leeren/verstecken
         return;
     }
 
-    // Wenn die Abfrage erfolgreich war, geht es hier weiter...
     const senders = messages.reduce((acc, msg) => {
-        // ZUSÄTZLICHE PRÜFUNG, ob das Profil geladen wurde
         if (msg.profiles) {
             const senderId = msg.profiles.id;
             const senderNickname = msg.profiles.nickname;
@@ -41,20 +40,17 @@ async function checkForNewMessages() {
                 acc[senderId] = { nickname: senderNickname, count: 0 };
             }
             acc[senderId].count++;
-        } else {
-            console.warn("Konnte Profil für eine Nachricht nicht laden. Überprüfe RLS auf 'profiles'!", msg);
         }
         return acc;
     }, {});
     
-    // Postfach-HTML aufbauen
     inboxDiv.innerHTML = '<h4>Neue Nachrichten:</h4>';
     const list = document.createElement('ul');
     for (const senderId in senders) {
         const sender = senders[senderId];
         const listItem = document.createElement('li');
         listItem.innerHTML = `<strong>${sender.nickname}</strong> (${sender.count} neue Nachricht${sender.count > 1 ? 'en' : ''})`;
-        listItem.onclick = () => openChat(senderId, sender.nickname); // Chat direkt öffnen
+        listItem.onclick = () => openChat(senderId, sender.nickname);
         list.appendChild(listItem);
     }
     inboxDiv.appendChild(list);

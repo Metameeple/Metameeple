@@ -125,7 +125,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     alert('Registrierung erfolgreich! Bitte prüfe deine E-Mails, um deinen Account zu bestätigen.');
     e.target.reset();
 });
-});// ... Login-Funktion (unverändert) ...
+// ... Login-Funktion (unverändert) ...
 document.getElementById('login-form').addEventListener('submit', async (e) => { e.preventDefault(); const email = document.getElementById('login-email').value; const password = document.getElementById('login-password').value; const { data, error } = await supabase.auth.signInWithPassword({ email, password }); if (error) { alert('Login fehlgeschlagen: ' + error.message); return; } document.getElementById('login-form').reset(); document.getElementById('register-form').reset(); });
 
 

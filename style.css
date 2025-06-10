@@ -249,3 +249,64 @@ button[type="submit"]:hover {
 #inbox-notifications li:hover {
     background-color: #d6eaff;
 }
+
+/* --- Stile für neue App-Struktur --- */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto 2rem auto;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.feature-box {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+    max-width: 700px;
+    width: 100%;
+    padding: 2rem;
+    margin: 0 auto 1.5rem auto;
+}
+
+/* --- Stile für Chat-Übersicht --- */
+#chat-history-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#chat-history-list li {
+    padding: 12px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+#chat-history-list li:hover {
+    background-color: #f7f9fa;
+}
+
+#chat-history-list li:last-child {
+    border-bottom: none;
+}
+
+/* --- Stile für Account-Seite --- */
+#account-view p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+#account-view p strong {
+    color: #555;
+}
+
+.secondary-btn {
+    background-color: #7f8c8d;
+}
+.secondary-btn:hover {
+    background-color: #95a5a6;
+}

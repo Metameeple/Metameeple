@@ -199,5 +199,37 @@ function closeChat() {
     }
 }
 
-// ... Nachricht senden (unverändert) ...
-document.getElementById('chat-form').addEventListener('submit', async (e) => { e.preventDefault(); const chatInput = document.getElementById('chat-input'); const content = chatInput.value.trim(); if (!content) return; const { data: { user } } = await supabase.auth.getUser(); const sender_id = user.id; const receiver_id = document.getElementById('chat-modal').dataset.receiverId; const { error } = await supabase.from('messages').insert({ sender_id, receiver_id, content }); if (error) { alert('Fehler beim Senden der Nachricht: ' + error.message); } else { chatInput.value = ''; } });
+// Nachricht senden
+document.getElementById('chat-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const chatInput = document.getElementById('chat-input');
+    const content = chatInput.value.trim();
+    if (!content) return;
+
+    const { data: { user } } = await supabase.auth.getUser();
+    const sender_id = user.id;
+    const receiver_id = document.getElementById('chat-modal').dataset.receiverId;
+
+    // --- DEBUGGING START ---
+    console.log("Sende Nachricht...");
+    console.log("Sender ID:", sender_id);
+    console.log("Receiver ID:", receiver_id);
+    // --- DEBUGGING ENDE ---
+    
+    const { error } = await supabase.from('messages').insert({
+        sender_id,
+        receiver_id,
+        content
+    });
+
+    if (error) {
+   // --- DEBUGGING START ---
+// Zeige den exakten Fehler in der Entwicklerkonsole an!
+        console.error('Supabase INSERT Error:', error);
+    // --- DEBUGGING ENDE ---     
+        alert('Fehler beim Senden der Nachricht: ' + error.message);
+         
+    } else {
+        chatInput.value = '';
+    }
+});

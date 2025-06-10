@@ -140,24 +140,30 @@ async function openChat(receiverId, receiverNickname) {
     const { data: { user } } = await supabase.auth.getUser();
     const senderId = user.id;
 
-    // GEÄNDERT: Nachrichten als gelesen markieren, BEVOR sie angezeigt werden
+    // Nachrichten als gelesen markieren
     await supabase
         .from('messages')
         .update({ is_read: true })
         .eq('receiver_id', senderId)
         .eq('sender_id', receiverId);
     
-    // NEU: Nach dem Markieren das Postfach aktualisieren, damit die Benachrichtigung verschwindet
+    // Postfach aktualisieren
     await checkForNewMessages();
 
     // Nachrichten abrufen
     const { data: messages, error } = await supabase
         .from('messages')
         .select('*')
-        .or(`(sender_id.eq.${senderId},receiver_id.eq.${receiverId}),(sender_id.eq.${receiverId},receiver_id.eq.${senderId})`)
+        // HIER IST DIE KORREKTUR: Die Klammern () wurden durch and() ersetzt
+        .or(`and(sender_id.eq.${senderId},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${senderId})`)
         .order('created_at', { ascending: true });
 
-    if (error) { messagesDiv.innerText = 'Fehler beim Laden der Nachrichten.'; return; }
+    if (error) {
+        // Dieser Fehler sollte jetzt nicht mehr auftreten
+        console.error("Fehler beim Laden des Chats:", error);
+        messagesDiv.innerText = 'Fehler beim Laden der Nachrichten.';
+        return;
+    }
     
     messagesDiv.innerHTML = '';
     messages.forEach(msg => displayMessage(msg, senderId));

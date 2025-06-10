@@ -41,6 +41,22 @@
         </form>
         <div id="output-recommend" class="output-container"></div>
 
+        <h3 style="margin-top: 40px;">KI-Spiele-Generator</h3>
+        
+<form id="ai-form">
+    <label for="equipment-input">Welches Spielmaterial hast du?</label>
+    <textarea 
+        id="equipment-input" 
+        rows="4" 
+        placeholder="z.B. 6 Würfel, 1 Satz Spielkarten, 50 Münzen, 1 leeres Blatt Papier..."
+        required></textarea>
+    <button type="submit">Vorschlag generieren</button>
+</form>
+<div id="ai-output" class="output-container" style="display: none;">
+    <div id="ai-loading" style="display: none;">Generiere kreative Ideen... 🧠</div>
+    <div id="ai-result"></div>
+</div>
+
         <h3 style="margin-top: 40px;">Mitspieler finden</h3>
         <form id="match-form">
             <input type="text" id="region" placeholder="Region" required />

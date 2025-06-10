@@ -91,10 +91,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('chat-close-btn').addEventListener('click', closeChat);
 });
 
-// ... Registrierungs-Funktion (unverändert) ...
-document.getElementById('register-form').addEventListener('submit', async (e) => { e.preventDefault(); const email = document.getElementById('register-email').value; const password = document.getElementById('register-password').value; const nickname = document.getElementById('register-nickname').value; const alter = document.getElementById('register-age').value; const region = document.getElementById('register-region').value; const favorite_game = document.getElementById('register-favorite-game').value; const { data: existingProfile, error: checkError } = await supabase .from('profiles') .select('nickname') .eq('nickname', nickname) .single(); if (existingProfile) { alert('Dieser Nickname ist bereits vergeben. Bitte wähle einen anderen.'); return; } const { data, error } = await supabase.auth.signUp({ email, password }); if (error) { alert('Registrierung fehlgeschlagen: ' + error.message); return; } if (data.user) { const { error: insertError } = await supabase.from('profiles').insert({ id: data.user.id, email: data.user.email, nickname, alter, region, favorite_game }); if (insertError) { alert('Fehler beim Speichern des Profils: ' + insertError.message); return; } alert('Registrierung erfolgreich! Bitte bestätige deine E-Mail und logge dich dann ein.'); e.target.reset(); } });
+// ERSETZE die alte Registrierungs-Funktion mit dieser:
+document.getElementById('register-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+    
+    // Wir müssen die zusätzlichen Daten in 'options' übergeben, damit der Trigger sie hat.
+    // Aber für den Anfang vereinfachen wir: Der Trigger holt sich die E-Mail.
+    // Die anderen Daten (Nickname etc.) muss der Nutzer nach dem ersten Login eintragen.
+    
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        // options: {
+        //     data: {
+        //         nickname: document.getElementById('register-nickname').value,
+        //         region: document.getElementById('register-region').value,
+        //         favorite_game: document.getElementById('register-favorite-game').value
+        //     }
+        // }
+    });
 
-// ... Login-Funktion (unverändert) ...
+    if (error) {
+        alert('Registrierung fehlgeschlagen: ' + error.message);
+        return;
+    }
+
+    alert('Registrierung erfolgreich! Bitte prüfe deine E-Mails, um deinen Account zu bestätigen.');
+    e.target.reset();
+});// ... Login-Funktion (unverändert) ...
 document.getElementById('login-form').addEventListener('submit', async (e) => { e.preventDefault(); const email = document.getElementById('login-email').value; const password = document.getElementById('login-password').value; const { data, error } = await supabase.auth.signInWithPassword({ email, password }); if (error) { alert('Login fehlgeschlagen: ' + error.message); return; } document.getElementById('login-form').reset(); document.getElementById('register-form').reset(); });
 
 

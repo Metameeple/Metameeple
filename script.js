@@ -12,6 +12,7 @@ async function checkForNewMessages() {
     if (!user) return;
 
     const inboxDiv = document.getElementById('inbox-notifications');
+    console.log("--- Postfach-Check gestartet ---"); // Zeigt, dass die Funktion läuft
 
     const { data: messages, error } = await supabase
         .from('messages')
@@ -19,19 +20,30 @@ async function checkForNewMessages() {
         .eq('receiver_id', user.id)
         .eq('is_read', false);
 
+    // DIESER DEBUG-BLOCK IST ENTSCHEIDEND
+    console.log("Abgerufene Nachrichten-Objekte:", messages);
+    console.log("Fehler bei der Abfrage:", error);
+    console.log("---------------------------------");
+
+
     if (error || !messages || messages.length === 0) {
         inboxDiv.innerHTML = ''; // Keine Nachrichten, Postfach leeren/verstecken
         return;
     }
 
-    // Nachrichten nach Absender gruppieren
+    // Wenn die Abfrage erfolgreich war, geht es hier weiter...
     const senders = messages.reduce((acc, msg) => {
-        const senderId = msg.profiles.id;
-        const senderNickname = msg.profiles.nickname;
-        if (!acc[senderId]) {
-            acc[senderId] = { nickname: senderNickname, count: 0 };
+        // ZUSÄTZLICHE PRÜFUNG, ob das Profil geladen wurde
+        if (msg.profiles) {
+            const senderId = msg.profiles.id;
+            const senderNickname = msg.profiles.nickname;
+            if (!acc[senderId]) {
+                acc[senderId] = { nickname: senderNickname, count: 0 };
+            }
+            acc[senderId].count++;
+        } else {
+            console.warn("Konnte Profil für eine Nachricht nicht laden. Überprüfe RLS auf 'profiles'!", msg);
         }
-        acc[senderId].count++;
         return acc;
     }, {});
     

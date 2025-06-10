@@ -1,87 +1,219 @@
 /* global box-sizing */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+*, *::before, *::after {
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f7fa;
-  color: #333;
-  margin: 2rem auto;
-  padding: 0 1.5rem;
-  
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  max-width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    max-width: 100%;
 }
 
-form, #output {
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
-  max-width: 700px;
-  width: 100%;  /* damit es responsive bleibt */
-  padding: 2rem; /* gleichmäßiges Padding */
-  margin: 0  auto 2.5rem auto; /* zentriert und margin unten */
+form, .output-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+    max-width: 700px;
+    width: 100%; /* damit es responsive bleibt */
+    padding: 2rem;
+    margin: 0 auto 1.5rem auto; /* zentriert und margin unten */
+}
+
+.output-container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    white-space: pre-wrap;
 }
 
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 700px;
-  width: 100%;
-  margin: 0 auto 2rem auto;
-  padding: 0 2rem; /* optional: horizontalen Abstand an Header-Seiten */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto 2rem auto;
+    padding: 0 2rem;
 }
 
 header h1 {
-  font-size: 1.8rem;
-  margin: 0;
+    font-size: 1.8rem;
+    margin: 0;
 }
 
-/* Inputs & Buttons bleiben gleich... */
-
-input[type="email"],
-input[type="password"],
-input[type="text"],
-input[type="number"] {
-  width: 100%;
-  padding: 0.55rem 0.75rem;
-  margin-top: 0.4rem;
-  margin-bottom: 1rem;
-  border: 1px solid #bbb;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
+input[type="email"], input[type="password"], input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    margin-top: 0.4rem;
+    margin-bottom: 1rem;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
 }
 
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="text"]:focus,
-input[type="number"]:focus {
-  border-color: #3498db;
-  outline: none;
+input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus, input[type="number"]:focus {
+    border-color: #3498db;
+    outline: none;
 }
 
 button[type="submit"] {
-  width: 100%;
-  padding: 0.65rem;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    width: 100%;
+    padding: 0.65rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 button[type="submit"]:hover {
-  background-color: #2980b9;
+    background-color: #2980b9;
 }
 
+/* --- Neue Stile für dynamische Inhalte --- */
+
+.result-item {
+    border-bottom: 1px solid #eee;
+    padding: 1rem 0;
+}
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-item p {
+    margin: 0.2rem 0;
+}
+
+.game-title-link {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    text-decoration: none;
+}
+.game-title-link:hover {
+    text-decoration: underline;
+}
+
+.action-button {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-top: 8px;
+    margin-right: 8px;
+    background-color: #2ecc71;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+}
+.action-button:hover {
+    background-color: #27ae60;
+}
+
+.chat-button {
+    background-color: #e67e22;
+}
+.chat-button:hover {
+    background-color: #d35400;
+}
+
+
+/* --- Stile für das Chat Modal --- */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    height: 80%;
+    max-height: 600px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+}
+
+#chat-messages {
+    flex-grow: 1;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1rem;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-form {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+}
+
+#chat-form input {
+    flex-grow: 1;
+    margin: 0 10px 0 0;
+}
+
+#chat-form button {
+    width: auto;
+}
+
+.chat-message {
+    padding: 8px 12px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.sent {
+    background-color: #3498db;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 3px;
+}
+
+.received {
+    background-color: #ecf0f1;
+    color: #333;
+    align-self: flex-start;
+    border-bottom-left-radius: 3px;
+}

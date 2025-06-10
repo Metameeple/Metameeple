@@ -247,3 +247,35 @@ document.getElementById('chat-form').addEventListener('submit', async (e) => {
         chatInput.value = '';
     }
 });
+
+// KI-SPIELE-GENERATOR
+document.getElementById('ai-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const equipmentInput = document.getElementById('equipment-input').value;
+    const outputDiv = document.getElementById('ai-output');
+    const loadingDiv = document.getElementById('ai-loading');
+    const resultDiv = document.getElementById('ai-result');
+    
+    outputDiv.style.display = 'block';
+    loadingDiv.style.display = 'block';
+    resultDiv.innerHTML = '';
+
+    try {
+        const { data, error } = await supabase.functions.invoke('generate-game-idea', {
+            body: { equipment: equipmentInput },
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        // Die Markdown-Antwort der KI in HTML umwandeln und anzeigen
+        resultDiv.innerHTML = marked.parse(data.gameIdea);
+
+    } catch (error) {
+        resultDiv.innerHTML = `<p style="color: red;"><strong>Fehler:</strong> ${error.message}</p>`;
+    } finally {
+        loadingDiv.style.display = 'none';
+    }
+});

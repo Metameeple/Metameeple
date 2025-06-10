@@ -217,3 +217,35 @@ button[type="submit"]:hover {
     align-self: flex-start;
     border-bottom-left-radius: 3px;
 }
+
+/* --- Stile für das Postfach --- */
+#inbox-notifications {
+    background-color: #eaf5ff;
+    border: 1px solid #bce8f1;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    color: #31708f;
+}
+
+#inbox-notifications h4 {
+    margin-top: 0;
+    color: #31708f;
+}
+
+#inbox-notifications ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#inbox-notifications li {
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#inbox-notifications li:hover {
+    background-color: #d6eaff;
+}

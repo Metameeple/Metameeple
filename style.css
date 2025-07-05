@@ -16,6 +16,33 @@ body {
     max-width: 100%;
 }
 
+/* Neuer Container für den Logout Button */
+#logout-button-container {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    justify-content: flex-end; /* Button rechts ausrichten */
+    margin-top: 10px; /* Kleiner Abstand zum Logo */
+    margin-bottom: 20px; /* Abstand zu den nächsten Elementen */
+}
+
+#logout-btn {
+    padding: 8px 15px; /* Etwas kleinerer Padding als andere Buttons */
+    background-color: #FFD700; /* Goldgelb */
+    color: #333; /* Dunkler Text */
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem; /* Etwas kleinerer Font */
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#logout-btn:hover {
+    background-color: #FFA500; /* Orange-Gelb für Hover */
+}
+
+
 form, .output-container {
     background-color: #FFFFFF; /* Weiße Hintergründe für Formulare und Output */
     border-radius: 8px;

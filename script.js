@@ -67,14 +67,17 @@ async function handleAuthChange(session) {
 
 function toggleUI(session) {
     const app = document.getElementById('app');
-    const authContainer = document.getElementById('auth-container'); // NEU
+    const authSection = document.getElementById('auth-section'); // NEU
+    const showAuthBtn = document.getElementById('show-auth-btn'); // NEU
     
     if (session) {
         app.style.display = 'block';
-        authContainer.style.display = 'none'; // NEU
+        authSection.style.display = 'none'; // NEU
+        showAuthBtn.style.display = 'none'; // NEU
     } else {
         app.style.display = 'none';
-        authContainer.style.display = 'block'; // NEU
+        authSection.style.display = 'none'; // NEU: Initial versteckt
+        showAuthBtn.style.display = 'block'; // NEU: Button sichtbar
     }
 }
 
@@ -88,6 +91,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('chat-close-btn').addEventListener('click', closeChat);
     document.getElementById('guest-login-btn').addEventListener('click', handleGuestLogin);
+    
+    // NEU: Event-Listener für den Button, der die Auth-Sektion zeigt
+    document.getElementById('show-auth-btn').addEventListener('click', () => {
+        document.getElementById('auth-section').style.display = 'block';
+        document.getElementById('show-auth-btn').style.display = 'none';
+    });
 
     // NEU: Event-Listener für Filter-Checkboxes
     document.getElementById('enable-spieleranzahl').addEventListener('change', function() {
@@ -208,7 +217,7 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
     }
     if (enableMinAge) {
         if (!isNaN(minAge)) {
-            query = query.gte('Alter_min', minAge);
+            query = query.lte('Alter_min', minAge); // GEÄNDERT: gte zu lte
         } else {
             outputDiv.innerText = 'Bitte geben Sie ein Mindestalter ein oder deaktivieren Sie den Filter.';
             return;
@@ -288,7 +297,7 @@ async function openChat(receiverId, receiverNickname) {
         .channel(channelName, { config: { broadcast: { self: true } } })
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
             if ((payload.new.sender_id === senderId && payload.new.receiver_id === receiverId) ||
-                (payload.new.new.sender_id === receiverId && payload.new.receiver_id === senderId)) {
+                (payload.new.sender_id === receiverId && payload.new.receiver_id === senderId)) {
                 displayMessage(payload.new, senderId);
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
             }

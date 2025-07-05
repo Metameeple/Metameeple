@@ -335,3 +335,37 @@ button[type="submit"]:hover {
 #inbox-notifications li:hover {
     background-color: #fff5be; /* Etwas dunkleres Hellgelb für Hover */
 }
+.recommended-game {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    position: relative;
+}
+
+.recommended-game-content {
+    flex: 1;
+    padding-right: 170px; /* Platz für das Bild rechts oben */
+}
+
+.recommended-game-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.recommended-game-details p {
+    margin: 0.2rem 0;
+}
+
+.recommended-game-image {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    max-width: 150px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+

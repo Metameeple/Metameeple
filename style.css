@@ -128,6 +128,19 @@ button[type="submit"]:hover {
     background-color: #d35400;
 }
 
+/* NEU: Stil für den Gast-Button */
+.guest-button {
+    background-color: #6c757d; /* Grau */
+    width: 100%; /* Macht den Button so breit wie die anderen Formular-Buttons */
+    padding: 0.65rem; /* Gleiches Padding wie submit-Button */
+    border-radius: 6px; /* Gleicher Radius wie submit-Button */
+    font-size: 1.1rem; /* Gleiche Schriftgröße wie submit-Button */
+    font-weight: 600; /* Gleiche Schriftstärke wie submit-Button */
+}
+
+.guest-button:hover {
+    background-color: #5a6268; /* Dunkleres Grau beim Hover */
+}
 
 /* --- Stile für das Chat Modal --- */
 .modal-backdrop {

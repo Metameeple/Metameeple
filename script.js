@@ -199,8 +199,8 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
 
     const outputDiv = document.getElementById('output-recommend');
 
-    // NEU: image_url und description zur Abfrage hinzugefügt
-    let query = supabase.from('spielempfehlungen').select('spiel, Autor, Komplexität, BGG, Buy, image_url, description');
+    // HINWEIS: max_dauer wurde zur Select-Abfrage hinzugefügt, um sie anzuzeigen.
+    let query = supabase.from('spielempfehlungen').select('spiel, Autor, Komplexität, BGG, Buy, image_url, description, max_dauer');
 
     if (enableAnzahl) {
         // Stellen Sie sicher, dass der Wert nur dann verwendet wird, wenn das Feld nicht leer ist
@@ -213,7 +213,9 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
     }
     if (enableDauer) {
         if (!isNaN(dauer)) {
-            query = query.lte('max_dauer', dauer);
+            // Dies ist die korrekte Logik für "kleiner oder gleich".
+            console.log(`Filtering for max_dauer <= ${dauer}`); // DEBUG: Zeigt den Filterwert an
+            query = query.lte('max_dauer', dauer); 
         } else {
             outputDiv.innerText = 'Bitte geben Sie eine maximale Dauer ein oder deaktivieren Sie den Filter.';
             return;
@@ -249,8 +251,12 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
                 imageHtml = `<img src="https://via.placeholder.com/150?text=Kein+Bild" alt="Platzhalterbild" class="game-image">`;
             }
 
-            // Platzhalter für Gemini-Beschreibung, da direkte Generierung hier nicht möglich ist
-            const descriptionHtml = r.description ? `<p>${r.description}</p>` : `<p>[Beschreibung: Die Generierung durch Gemini ist hier nicht direkt implementierbar.]</p>`;
+            // Wenn eine Beschreibung in der Datenbank vorhanden ist, wird diese angezeigt.
+            // Die dynamische Generierung eines Satzes von Gemini auf Client-Seite für jedes Spiel
+            // ist in dieser Umgebung nicht direkt umsetzbar.
+            const descriptionHtml = r.description ? `<p>${r.description}</p>` : `<p>[Beschreibung: Eine dynamische Generierung durch Gemini ist hier nicht direkt integriert.]</p>`;
+
+            console.log(`Game: ${r.spiel}, Returned max_dauer: ${r.max_dauer}`); // DEBUG: Zeigt die zurückgegebene max_dauer an
 
             itemDiv.innerHTML = `
                 ${imageHtml}
@@ -258,6 +264,7 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
                 ${descriptionHtml}
                 <p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p>
                 <p><strong>Komplexität:</strong> ${r.Komplexität || 'N/A'}</p>
+                <p><strong>Max. Dauer:</strong> ${r.max_dauer || 'N/A'} Minuten</p>
                 <a href="${r.Buy}" target="_blank" class="action-button">Bei Amazon kaufen</a>
             `; 
             outputDiv.appendChild(itemDiv); 

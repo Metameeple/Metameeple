@@ -190,7 +190,7 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
     e.preventDefault();
     
     const anzahl = parseInt(document.getElementById('spieleranzahl').value);
-    const dauer = parseInt(document.getElementById('dauer').value);
+    const dauer = parseInt(document.getElementById('max_dauer').value);
     const minAge = parseInt(document.getElementById('min-age').value);
 
     const enableAnzahl = document.getElementById('enable-spieleranzahl').checked;

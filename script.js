@@ -1,7 +1,7 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
 const supabaseUrl = 'https://oywfzyfzpencghrpqfdk.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d2Z6eWZ6cGVuY2docnBxZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTc4ODUsImV4cCI6MjA2NDc5Mzg4NX0.OdMh5TH47gDdFYkWYQELxruXvdjhyLuMRfRjFJ1tywM';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d2Z6eWZ6cGVuY2docnBxZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTc4ODUsImV4cCI6MjA2NDc5Mzg4NX0.OdMh5TH47gDdFYkWYQELXruXvdjhyLuMRfRjFJ1tywM';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 let chatSubscription = null;
@@ -67,16 +67,14 @@ async function handleAuthChange(session) {
 
 function toggleUI(session) {
     const app = document.getElementById('app');
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
+    const authContainer = document.getElementById('auth-container'); // NEU
+    
     if (session) {
         app.style.display = 'block';
-        loginForm.style.display = 'none';
-        registerForm.style.display = 'none';
+        authContainer.style.display = 'none'; // NEU
     } else {
         app.style.display = 'none';
-        loginForm.style.display = 'block';
-        registerForm.style.display = 'block';
+        authContainer.style.display = 'block'; // NEU
     }
 }
 
@@ -156,26 +154,49 @@ document.getElementById('logout-btn').addEventListener('click', async () => {
 });
 
 
-// SPIELEMPFEHLUNG (mit korrigiertem Filter)
+// SPIELEMPFEHLUNG (mit korrigiertem Filter und Filter-Toggles)
 document.getElementById('recommend-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    
     const anzahl = parseInt(document.getElementById('spieleranzahl').value);
     const dauer = parseInt(document.getElementById('dauer').value);
     const minAge = parseInt(document.getElementById('min-age').value);
+
+    const enableAnzahl = document.getElementById('enable-spieleranzahl').checked;
+    const enableDauer = document.getElementById('enable-dauer').checked;
+    const enableMinAge = document.getElementById('enable-min-age').checked;
+
     const outputDiv = document.getElementById('output-recommend');
 
-    const { data: recommendations, error } = await supabase
-        .from('spielempfehlungen')
-        .select('spiel, Autor, Komplexität, BGG, Buy')
-        .lte('min_spieler', anzahl)
-        .gte('max_spieler', anzahl)
-        // GEÄNDERT: Korrekte Logik für die Dauer
-        .lte('max_dauer', dauer)
-        .gte('Alter_min', minAge);
+    let query = supabase.from('spielempfehlungen').select('spiel, Autor, Komplexität, BGG, Buy');
 
-    // Rest der Funktion bleibt gleich...
-    if (error) { outputDiv.innerText = 'Fehler: ' + error.message; return; }
-    if (!recommendations || recommendations.length === 0) { outputDiv.innerText = 'Keine passenden Empfehlungen gefunden.'; } else { outputDiv.innerHTML = '<h3>Empfohlene Spiele:</h3>'; recommendations.forEach(r => { const itemDiv = document.createElement('div'); itemDiv.className = 'result-item'; itemDiv.innerHTML = `<a href="${r.BGG}" target="_blank" class="game-title-link">${r.spiel}</a><p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p><p><strong>Komplexität:</strong> ${r.Komplexität || 'N/A'}</p><a href="${r.Buy}" target="_blank" class="action-button">Bei Amazon kaufen</a>`; outputDiv.appendChild(itemDiv); }); }
+    if (enableAnzahl) {
+        query = query.lte('min_spieler', anzahl).gte('max_spieler', anzahl);
+    }
+    if (enableDauer) {
+        query = query.lte('max_dauer', dauer);
+    }
+    if (enableMinAge) {
+        query = query.gte('Alter_min', minAge);
+    }
+
+    const { data: recommendations, error } = await query;
+
+    if (error) { 
+        outputDiv.innerText = 'Fehler: ' + error.message; 
+        return; 
+    }
+    if (!recommendations || recommendations.length === 0) { 
+        outputDiv.innerText = 'Keine passenden Empfehlungen gefunden.'; 
+    } else { 
+        outputDiv.innerHTML = '<h3>Empfohlene Spiele:</h3>'; 
+        recommendations.forEach(r => { 
+            const itemDiv = document.createElement('div'); 
+            itemDiv.className = 'result-item'; 
+            itemDiv.innerHTML = `<a href="${r.BGG}" target="_blank" class="game-title-link">${r.spiel}</a><p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p><p><strong>Komplexität:</strong> ${r.Komplexität || 'N/A'}</p><a href="${r.Buy}" target="_blank" class="action-button">Bei Amazon kaufen</a>`; 
+            outputDiv.appendChild(itemDiv); 
+        }); 
+    }
 });
 
 // ... Mitspieler finden (unverändert) ...
@@ -232,7 +253,7 @@ async function openChat(receiverId, receiverNickname) {
         .channel(channelName, { config: { broadcast: { self: true } } })
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
             if ((payload.new.sender_id === senderId && payload.new.receiver_id === receiverId) ||
-                (payload.new.sender_id === receiverId && payload.new.receiver_id === senderId)) {
+                (payload.new.new.sender_id === receiverId && payload.new.receiver_id === senderId)) {
                 displayMessage(payload.new, senderId);
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
             }

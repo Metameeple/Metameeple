@@ -335,38 +335,3 @@ button[type="submit"]:hover {
 #inbox-notifications li:hover {
     background-color: #fff5be; /* Etwas dunkleres Hellgelb für Hover */
 }
-.recommendation-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    background-color: #fff;
-}
-
-.recommendation-text {
-    flex: 1;
-}
-
-.recommendation-title {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.recommendation-info {
-    margin-bottom: 0.3rem;
-    color: #444;
-}
-
-.recommendation-image {
-    margin-left: 1rem;
-    max-width: 120px;
-    height: auto;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-

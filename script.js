@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     document.getElementById('chat-close-btn').addEventListener('click', closeChat);
+    document.getElementById('guest-login-btn').addEventListener('click', handleGuestLogin);
 });
 
 // ERSETZE die alte Registrierungs-Funktion mit dieser:
@@ -127,6 +128,22 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
 });
 // ... Login-Funktion (unverändert) ...
 document.getElementById('login-form').addEventListener('submit', async (e) => { e.preventDefault(); const email = document.getElementById('login-email').value; const password = document.getElementById('login-password').value; const { data, error } = await supabase.auth.signInWithPassword({ email, password }); if (error) { alert('Login fehlgeschlagen: ' + error.message); return; } document.getElementById('login-form').reset(); document.getElementById('register-form').reset(); });
+
+
+// NEU: Gast-Login Funktion
+async function handleGuestLogin() {
+    const { data, error } = await supabase.auth.signInAnonymously();
+    if (error) {
+        alert('Gast-Login fehlgeschlagen: ' + error.message);
+        return;
+    }
+    // Nach erfolgreichem Gast-Login können wir optional ein Profil anlegen
+    // oder einfach die UI aktualisieren.
+    // Für dieses Beispiel aktualisieren wir nur die UI.
+    alert('Erfolgreich als Gast eingeloggt!');
+    // Die handleAuthChange Funktion wird durch onAuthStateChange aufgerufen
+    // und kümmert sich um die UI-Aktualisierung.
+}
 
 
 // ... Ausloggen-Funktion (jetzt mit Postfach leeren) ...

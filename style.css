@@ -163,6 +163,17 @@ button[type="submit"]:hover {
     color: #FFD700; /* Goldgelb für Hover */
 }
 
+/* Neuer Stil für Spielbilder */
+.game-image {
+    max-width: 150px; /* Maximale Breite des Bildes */
+    height: auto; /* Höhe automatisch anpassen */
+    display: block; /* Bild als Blockelement anzeigen */
+    margin: 10px 0; /* Abstand über und unter dem Bild */
+    border-radius: 5px; /* Abgerundete Ecken */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Leichter Schatten */
+}
+
+
 .action-button {
     display: inline-block;
     padding: 6px 12px;

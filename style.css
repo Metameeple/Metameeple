@@ -5,8 +5,8 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #FFFFFF; /* Weißer Hintergrund */
-    color: #333; /* Dunklerer Text für weißen Hintergrund */
+    background-color: #f5f7fa; /* Reverted to original light gray */
+    color: #333;
     margin: 2rem auto;
     padding: 0 1.5rem;
     display: flex;
@@ -28,30 +28,27 @@ body {
 
 #logout-btn {
     padding: 8px 15px; /* Etwas kleinerer Padding als andere Buttons */
-    background-color: #FFD700; /* Goldgelb */
-    color: #333; /* Dunkler Text */
+    background-color: #2ecc71; /* Reverted to green */
+    color: white;
     border: none;
     border-radius: 6px;
     font-size: 0.9rem; /* Etwas kleinerer Font */
-    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease;
 }
 
 #logout-btn:hover {
-    background-color: #FFA500; /* Orange-Gelb für Hover */
+    background-color: #27ae60; /* Darker green on hover */
 }
 
-
 form, .output-container {
-    background-color: #FFFFFF; /* Weiße Hintergründe für Formulare und Output */
+    background-color: white;
     border-radius: 8px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1); /* Hellerer Schatten */
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
     max-width: 700px;
     width: 100%; /* damit es responsive bleibt */
     padding: 2rem;
     margin: 0 auto 1.5rem auto; /* zentriert und margin unten */
-    color: #333; /* Dunkler Text in Formularen */
 }
 
 .output-container {
@@ -60,161 +57,195 @@ form, .output-container {
     white-space: pre-wrap;
 }
 
-h1, h2, h3, h4 {
-    color: #333; /* Dunkle Überschriften */
-}
-
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     max-width: 700px;
     width: 100%;
-    margin: 0 auto 2rem auto;
-    padding: 0 2rem;
+    margin-bottom: 1.5rem;
 }
 
-header h1 {
-    font-size: 1.8rem;
-    margin: 0;
+h1 {
+    color: #34495e;
+    text-align: center;
+    margin-bottom: 1.5rem;
 }
 
-input[type="email"], input[type="password"], input[type="text"], input[type="number"], textarea {
+h2 {
+    color: #34495e;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+h3 {
+    color: #34495e;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    width: 100%; /* Ensure h3 takes full width for centering */
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="number"],
+textarea {
     width: 100%;
-    padding: 0.55rem 0.75rem;
-    margin-top: 0.4rem;
+    padding: 0.8rem;
     margin-bottom: 1rem;
-    border: 1px solid #bbb; /* Standardgrauer Rand */
+    border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1rem;
-    transition: border-color 0.3s ease;
-    background-color: #f8f8f8; /* Sehr heller grauer Input-Hintergrund */
-    color: #333; /* Dunkler Input-Text */
-}
-
-input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
-    border-color: #FFD700; /* Goldgelb bei Fokus */
-    outline: none;
 }
 
 button[type="submit"] {
     width: 100%;
-    padding: 0.65rem;
-    background-color: #FFD700; /* Goldgelb */
-    color: #333; /* Dunkler Text für gelben Button */
+    padding: 0.8rem 1.2rem;
+    background-color: #3498db; /* Reverted to blue */
+    color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     font-size: 1.1rem;
-    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease;
 }
 
 button[type="submit"]:hover {
-    background-color: #FFA500; /* Orange-Gelb für Hover */
+    background-color: #2980b9; /* Darker blue on hover */
 }
-
-/* --- Neue Stile für dynamische Inhalte --- */
-
-.filter-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.filter-group label {
-    margin-right: 10px;
-    white-space: nowrap;
-}
-
-.filter-group input[type="checkbox"] {
-    margin-right: 5px;
-    width: auto; /* Checkboxen nehmen nicht die volle Breite ein */
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.filter-group input[type="number"] {
-    flex-grow: 1; /* Eingabefeld füllt den restlichen Platz aus */
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.result-item {
-    border-bottom: 1px solid #eee; /* Hellerer Trennstrich */
-    padding: 1rem 0;
-}
-.result-item:last-child {
-    border-bottom: none;
-}
-
-.result-item p {
-    margin: 0.2rem 0;
-}
-
-.game-title-link {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #333; /* Dunklerer Text für Spieltitel */
-    text-decoration: none;
-}
-.game-title-link:hover {
-    text-decoration: underline;
-    color: #FFD700; /* Goldgelb für Hover */
-}
-
-/* Neuer Stil für Spielbilder */
-.game-image {
-    max-width: 150px; /* Maximale Breite des Bildes */
-    height: auto; /* Höhe automatisch anpassen */
-    display: block; /* Bild als Blockelement anzeigen */
-    margin: 10px 0; /* Abstand über und unter dem Bild */
-    border-radius: 5px; /* Abgerundete Ecken */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Leichter Schatten */
-}
-
 
 .action-button {
     display: inline-block;
-    padding: 6px 12px;
-    margin-top: 8px;
-    margin-right: 8px;
-    background-color: #FFD700; /* Goldgelb */
-    color: #333; /* Dunkler Text */
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 0.9rem;
+    padding: 0.8rem 1.2rem;
+    background-color: #2ecc71; /* Reverted to green */
+    color: white;
     border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
     cursor: pointer;
-}
-.action-button:hover {
-    background-color: #FFA500; /* Orange-Gelb für Hover */
+    transition: background-color 0.2s ease;
+    text-decoration: none; /* For anchor tags styled as buttons */
+    text-align: center;
 }
 
-.chat-button {
-    background-color: #e67e22; /* Orange */
-}
-.chat-button:hover {
-    background-color: #d35400; /* Dunkleres Orange */
+.action-button:hover {
+    background-color: #27ae60; /* Darker green on hover */
 }
 
 .guest-button {
-    background-color: #ccc; /* Hellgrau für Gast-Login-Button */
-    color: #333;
+    background-color: #95a5a6; /* Grauer Button */
 }
+
 .guest-button:hover {
-    background-color: #bbb;
+    background-color: #7f8c8d; /* Dunkleres Grau für Hover */
+}
+
+.error-message {
+    color: red;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.success-message {
+    color: green;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/* Stile für das In-App-Bereich */
+#app {
+    width: 100%;
+    max-width: 700px;
+}
+
+#app h3 {
+    text-align: left; /* Überschriften im App-Bereich linksbündig */
+    margin-bottom: 1rem;
+}
+
+/* Stil für Suchergebnisse (Mitspieler finden) */
+.result-item {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    position: relative; /* For absolute positioning of image */
+    padding-right: 120px; /* Make space for the image */
+    text-align: right; /* Right-align all content within result-item */
+}
+
+.result-item p {
+    margin: 0.5rem 0; /* Small paragraphs */
+    color: #555;
+    word-wrap: break-word; /* Ensure long words wrap */
+}
+
+/* Styling for game recommendation results */
+#output-recommendation .result-item {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    padding-right: 120px; /* Space for the image */
+    text-align: right; /* Right-align all content within the result-item */
+}
+
+#output-recommendation .result-item h4 {
+    color: #34495e;
+    margin-top: 0;
+    margin-bottom: 0.5rem; /* Small paragraphs */
+    width: calc(100% - 110px); /* Account for image width */
+    float: right; /* Float title to the right */
+    clear: right; /* Clear float after title */
+}
+
+#output-recommendation .result-item p {
+    margin-bottom: 0.5rem; /* Small paragraphs between infos */
+    color: #555;
+    width: calc(100% - 110px); /* Account for image width */
+    float: right; /* Float paragraphs to the right */
+    clear: right; /* Clear float after each paragraph */
+}
+
+.game-image {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    max-width: 100px;
+    height: auto;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.game-actions {
+    width: 100%; /* Take full width */
+    text-align: right; /* Right align content */
+    margin-top: 1rem; /* Space from description */
+    clear: both; /* Clear any floats above it */
+}
+
+.game-actions .action-button {
+    margin-left: 0.5rem; /* Space between buttons if multiple */
 }
 
 
-/* --- Stile für das Chat Modal --- */
+/* Chat Modal Styles */
 .modal-backdrop {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Standard dunklerer Hintergrund */
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -222,41 +253,38 @@ button[type="submit"]:hover {
 }
 
 .modal-content {
-    background-color: #FFFFFF; /* Weißer Hintergrund für Modal */
+    background-color: white;
     padding: 2rem;
     border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
-    height: 80%;
-    max-height: 600px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    position: relative;
+    max-width: 500px;
+    width: 90%;
     display: flex;
     flex-direction: column;
-    color: #333; /* Dunkler Text im Modal */
+    max-height: 80vh;
+    position: relative;
 }
 
 .modal-close-btn {
     position: absolute;
     top: 10px;
-    right: 15px;
-    font-size: 2rem;
+    right: 10px;
     background: none;
     border: none;
+    font-size: 1.5rem;
     cursor: pointer;
-    color: #888; /* Standardgrau für Schließen-Button */
+    color: #888;
 }
 
 #chat-messages {
     flex-grow: 1;
-    border: 1px solid #ddd; /* Hellerer Rand */
+    border: 1px solid #ddd;
     border-radius: 5px;
     padding: 1rem;
     overflow-y: auto;
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
-    background-color: #f8f8f8; /* Sehr heller Hintergrund für Chat-Bereich */
 }
 
 #chat-form {
@@ -274,12 +302,12 @@ button[type="submit"]:hover {
 
 #chat-form button {
     width: auto;
-    background-color: #FFD700; /* Goldgelb */
-    color: #333; /* Dunkler Text */
+    background-color: #3498db; /* Reverted to blue */
+    color: white;
 }
 
 #chat-form button:hover {
-    background-color: #FFA500; /* Orange-Gelb für Hover */
+    background-color: #2980b9; /* Darker blue on hover */
 }
 
 .chat-message {
@@ -291,47 +319,66 @@ button[type="submit"]:hover {
 }
 
 .sent {
-    background-color: #FFD700; /* Goldgelb für gesendete Nachrichten */
-    color: #333; /* Dunkler Text */
+    background-color: #3498db; /* Reverted to blue */
+    color: white;
     align-self: flex-end;
     border-bottom-right-radius: 3px;
 }
 
 .received {
-    background-color: #ecf0f1; /* Heller Grau-Ton für empfangene Nachrichten */
-    color: #333; /* Dunkler Text */
+    background-color: #ecf0f1;
+    color: #333;
     align-self: flex-start;
     border-bottom-left-radius: 3px;
 }
 
 /* --- Stile für das Postfach --- */
 #inbox-notifications {
-    background-color: #fffacd; /* Hellgelb (Lemon Chiffon) */
-    border: 1px solid #FFD700; /* Goldgelber Rand */
+    background-color: #fffacd;
+    border: 1px solid #FFD700;
     border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    color: #333; /* Dunkler Text */
+    padding: 1rem;
+    margin-top: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-#inbox-notifications h4 {
-    margin-top: 0;
-    color: #333; /* Dunkler Text */
+#inbox-notifications p {
+    margin: 0.5rem 0;
+    color: #555;
+    font-weight: bold;
 }
 
 #inbox-notifications ul {
-    list-style-type: none;
-    padding-left: 0;
-    margin: 0;
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
 }
 
 #inbox-notifications li {
-    padding: 8px;
+    background-color: #ffffe0; /* Hellgelber Hintergrund für Nachrichten */
+    padding: 10px;
+    border-bottom: 1px solid #FFD700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#inbox-notifications li:last-child {
+    border-bottom: none;
+}
+
+#inbox-notifications button {
+    background-color: #FFA500; /* Orange für Aktionen */
+    color: white;
+    border: none;
+    padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 0.8rem;
     transition: background-color 0.2s ease;
 }
 
-#inbox-notifications li:hover {
-    background-color: #fff5be; /* Etwas dunkleres Hellgelb für Hover */
+#inbox-notifications button:hover {
+    background-color: #FF8C00; /* Dunkleres Orange */
 }

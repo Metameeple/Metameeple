@@ -1,7 +1,7 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
 const supabaseUrl = 'https://oywfzyfzpencghrpqfdk.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d2Z6eWZ6cGVuY2docnBxZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTc4ODUsImV4cCI6MjA2NDc5Mzg4NX0.OdMh5TH47gDdFYkWYQELXruXvdjhyLuMRfRjFJ1tywM';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d2Z6eWZ6cGVuY2docnBxZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTc4ODUsImV4cCI6MjA2NDc5Mzg4NX0.OdMh5TH47gDdFYkWYQELxruXvdjhyLuMRfRjFJ1tywM';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 let chatSubscription = null;
@@ -88,6 +88,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('chat-close-btn').addEventListener('click', closeChat);
     document.getElementById('guest-login-btn').addEventListener('click', handleGuestLogin);
+
+    // NEU: Event-Listener für Filter-Checkboxes
+    document.getElementById('enable-spieleranzahl').addEventListener('change', function() {
+        document.getElementById('spieleranzahl').disabled = !this.checked;
+        if (!this.checked) document.getElementById('spieleranzahl').value = '';
+    });
+    document.getElementById('enable-dauer').addEventListener('change', function() {
+        document.getElementById('dauer').disabled = !this.checked;
+        if (!this.checked) document.getElementById('dauer').value = '';
+    });
+    document.getElementById('enable-min-age').addEventListener('change', function() {
+        document.getElementById('min-age').disabled = !this.checked;
+        if (!this.checked) document.getElementById('min-age').value = '';
+    });
+
+    // Initialen Zustand setzen (falls Checkboxes beim Laden schon unchecked sind)
+    document.getElementById('spieleranzahl').disabled = !document.getElementById('enable-spieleranzahl').checked;
+    document.getElementById('dauer').disabled = !document.getElementById('enable-dauer').checked;
+    document.getElementById('min-age').disabled = !document.getElementById('enable-min-age').checked;
 });
 
 // ERSETZE die alte Registrierungs-Funktion mit dieser:
@@ -171,13 +190,29 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
     let query = supabase.from('spielempfehlungen').select('spiel, Autor, Komplexität, BGG, Buy');
 
     if (enableAnzahl) {
-        query = query.lte('min_spieler', anzahl).gte('max_spieler', anzahl);
+        // Stellen Sie sicher, dass der Wert nur dann verwendet wird, wenn das Feld nicht leer ist
+        if (!isNaN(anzahl)) {
+             query = query.lte('min_spieler', anzahl).gte('max_spieler', anzahl);
+        } else {
+             outputDiv.innerText = 'Bitte geben Sie eine Spieleranzahl ein oder deaktivieren Sie den Filter.';
+             return;
+        }
     }
     if (enableDauer) {
-        query = query.lte('max_dauer', dauer);
+        if (!isNaN(dauer)) {
+            query = query.lte('max_dauer', dauer);
+        } else {
+            outputDiv.innerText = 'Bitte geben Sie eine maximale Dauer ein oder deaktivieren Sie den Filter.';
+            return;
+        }
     }
     if (enableMinAge) {
-        query = query.gte('Alter_min', minAge);
+        if (!isNaN(minAge)) {
+            query = query.gte('Alter_min', minAge);
+        } else {
+            outputDiv.innerText = 'Bitte geben Sie ein Mindestalter ein oder deaktivieren Sie den Filter.';
+            return;
+        }
     }
 
     const { data: recommendations, error } = await query;

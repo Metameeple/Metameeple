@@ -215,7 +215,7 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
         if (!isNaN(dauer)) {
             // Dies ist die korrekte Logik für "kleiner oder gleich".
             console.log(`Filtering for max_dauer <= ${dauer}`); // DEBUG: Zeigt den Filterwert an
-            query = query.gte('max_dauer', dauer); 
+            query = query.lte('max_dauer', dauer); 
         } else {
             outputDiv.innerText = 'Bitte geben Sie eine maximale Dauer ein oder deaktivieren Sie den Filter.';
             return;
@@ -259,13 +259,15 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
             console.log(`Game: ${r.spiel}, Returned max_dauer: ${r.max_dauer}`); // DEBUG: Zeigt die zurückgegebene max_dauer an
 
             itemDiv.innerHTML = `
+                <div class="game-content">
+                    <a href="${r.BGG}" target="_blank" class="game-title-link">${r.spiel}</a>
+                    ${descriptionHtml}
+                    <p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p>
+                    <p><strong>Komplexität:</strong> ${r.Komplexität || 'N/A'}</p>
+                    <p><strong>Max. Dauer:</strong> ${r.max_dauer || 'N/A'} Minuten</p>
+                    <a href="${r.Buy}" target="_blank" class="action-button">Bei Amazon kaufen</a>
+                </div>
                 ${imageHtml}
-                <a href="${r.BGG}" target="_blank" class="game-title-link">${r.spiel}</a>
-                ${descriptionHtml}
-                <p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p>
-                <p><strong>Komplexität:</strong> ${r.Komplexität || 'N/A'}</p>
-                <p><strong>Max. Dauer:</strong> ${r.max_dauer || 'N/A'} Minuten</p>
-                <a href="${r.Buy}" target="_blank" class="action-button">Bei Amazon kaufen</a>
             `; 
             outputDiv.appendChild(itemDiv); 
         }); 

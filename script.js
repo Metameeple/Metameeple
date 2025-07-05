@@ -67,17 +67,20 @@ async function handleAuthChange(session) {
 
 function toggleUI(session) {
     const app = document.getElementById('app');
-    const authSection = document.getElementById('auth-section'); // NEU
-    const showAuthBtn = document.getElementById('show-auth-btn'); // NEU
-    
+    const authSection = document.getElementById('auth-section'); 
+    const showAuthBtn = document.getElementById('show-auth-btn'); 
+    const logoutBtnContainer = document.getElementById('logout-button-container'); // NEU
+
     if (session) {
         app.style.display = 'block';
-        authSection.style.display = 'none'; // NEU
-        showAuthBtn.style.display = 'none'; // NEU
+        authSection.style.display = 'none'; 
+        showAuthBtn.style.display = 'none'; 
+        logoutBtnContainer.style.display = 'flex'; // NEU: Logout Button anzeigen
     } else {
         app.style.display = 'none';
-        authSection.style.display = 'none'; // NEU: Initial versteckt
-        showAuthBtn.style.display = 'block'; // NEU: Button sichtbar
+        authSection.style.display = 'none'; 
+        showAuthBtn.style.display = 'block'; 
+        logoutBtnContainer.style.display = 'none'; // NEU: Logout Button verstecken
     }
 }
 

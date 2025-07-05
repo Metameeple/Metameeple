@@ -259,13 +259,38 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
             console.log(`Game: ${r.spiel}, Returned max_dauer: ${r.max_dauer}`); // DEBUG: Zeigt die zurückgegebene max_dauer an
 
             itemDiv.innerHTML = `
-                ${imageHtml}
-                <a href="${r.BGG}" target="_blank" class="game-title-link">${r.spiel}</a>
-                ${descriptionHtml}
-                <p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p>
-                <p><strong>Komplexität:</strong> ${r.Komplexität || 'N/A'}</p>
-                <p><strong>Max. Dauer:</strong> ${r.max_dauer || 'N/A'} Minuten</p>
-                <a href="${r.Buy}" target="_blank" class="action-button">Bei Amazon kaufen</a>
+                const gameDiv = document.createElement('div');
+gameDiv.className = 'recommendation-card';
+
+const textDiv = document.createElement('div');
+textDiv.className = 'recommendation-text';
+
+const titleEl = document.createElement('div');
+titleEl.className = 'recommendation-title';
+titleEl.textContent = spiel.titel;
+
+textDiv.appendChild(titleEl);
+
+['beschreibung', 'spieleranzahl', 'dauer', 'alter'].forEach(key => {
+    if (spiel[key]) {
+        const p = document.createElement('div');
+        p.className = 'recommendation-info';
+        p.textContent = `${key.charAt(0).toUpperCase() + key.slice(1)}: ${spiel[key]}`;
+        textDiv.appendChild(p);
+    }
+});
+
+gameDiv.appendChild(textDiv);
+
+if (spiel.bild) {
+    const img = document.createElement('img');
+    img.src = spiel.bild;
+    img.alt = `Bild von ${spiel.titel}`;
+    img.className = 'recommendation-image';
+    gameDiv.appendChild(img);
+}
+
+document.getElementById('output-recommend').appendChild(gameDiv);
             `; 
             outputDiv.appendChild(itemDiv); 
         }); 

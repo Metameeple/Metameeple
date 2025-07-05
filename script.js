@@ -199,7 +199,8 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
 
     const outputDiv = document.getElementById('output-recommend');
 
-    let query = supabase.from('spielempfehlungen').select('spiel, Autor, Komplexität, BGG, Buy');
+    // NEU: image_url und description zur Abfrage hinzugefügt
+    let query = supabase.from('spielempfehlungen').select('spiel, Autor, Komplexität, BGG, Buy, image_url, description');
 
     if (enableAnzahl) {
         // Stellen Sie sicher, dass der Wert nur dann verwendet wird, wenn das Feld nicht leer ist
@@ -240,7 +241,25 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
         recommendations.forEach(r => { 
             const itemDiv = document.createElement('div'); 
             itemDiv.className = 'result-item'; 
-            itemDiv.innerHTML = `<a href="${r.BGG}" target="_blank" class="game-title-link">${r.spiel}</a><p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p><p><strong>Komplexität:</strong> ${r.Komplexität || 'N/A'}</p><a href="${r.Buy}" target="_blank" class="action-button">Bei Amazon kaufen</a>`; 
+            
+            let imageHtml = '';
+            if (r.image_url) {
+                imageHtml = `<img src="${r.image_url}" alt="Bild von ${r.spiel}" class="game-image">`;
+            } else {
+                imageHtml = `<img src="https://via.placeholder.com/150?text=Kein+Bild" alt="Platzhalterbild" class="game-image">`;
+            }
+
+            // Platzhalter für Gemini-Beschreibung, da direkte Generierung hier nicht möglich ist
+            const descriptionHtml = r.description ? `<p>${r.description}</p>` : `<p>[Beschreibung: Die Generierung durch Gemini ist hier nicht direkt implementierbar.]</p>`;
+
+            itemDiv.innerHTML = `
+                ${imageHtml}
+                <a href="${r.BGG}" target="_blank" class="game-title-link">${r.spiel}</a>
+                ${descriptionHtml}
+                <p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p>
+                <p><strong>Komplexität:</strong> ${r.Komplexität || 'N/A'}</p>
+                <a href="${r.Buy}" target="_blank" class="action-button">Bei Amazon kaufen</a>
+            `; 
             outputDiv.appendChild(itemDiv); 
         }); 
     }

@@ -5,8 +5,8 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #282828; /* Dunkler Schwarz-Ton */
-    color: #f5f7fa; /* Hellerer Text für dunklen Hintergrund */
+    background-color: #FFFFFF; /* Weißer Hintergrund */
+    color: #333; /* Dunklerer Text für weißen Hintergrund */
     margin: 2rem auto;
     padding: 0 1.5rem;
     display: flex;
@@ -17,14 +17,14 @@ body {
 }
 
 form, .output-container {
-    background-color: #1c1c1c; /* Etwas hellerer Schwarz-Ton für Container */
+    background-color: #FFFFFF; /* Weiße Hintergründe für Formulare und Output */
     border-radius: 8px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5); /* Dunklerer Schatten */
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1); /* Hellerer Schatten */
     max-width: 700px;
     width: 100%; /* damit es responsive bleibt */
     padding: 2rem;
     margin: 0 auto 1.5rem auto; /* zentriert und margin unten */
-    color: #f5f7fa; /* Heller Text in Formularen */
+    color: #333; /* Dunkler Text in Formularen */
 }
 
 .output-container {
@@ -34,7 +34,7 @@ form, .output-container {
 }
 
 h1, h2, h3, h4 {
-    color: #FFD700; /* Goldgelb für Überschriften */
+    color: #333; /* Dunkle Überschriften */
 }
 
 header {
@@ -57,12 +57,12 @@ input[type="email"], input[type="password"], input[type="text"], input[type="num
     padding: 0.55rem 0.75rem;
     margin-top: 0.4rem;
     margin-bottom: 1rem;
-    border: 1px solid #555; /* Dunklerer Rand */
+    border: 1px solid #bbb; /* Standardgrauer Rand */
     border-radius: 5px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
-    background-color: #333; /* Dunkler Input-Hintergrund */
-    color: #f5f7fa; /* Heller Input-Text */
+    background-color: #f8f8f8; /* Sehr heller grauer Input-Hintergrund */
+    color: #333; /* Dunkler Input-Text */
 }
 
 input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
@@ -74,7 +74,7 @@ button[type="submit"] {
     width: 100%;
     padding: 0.65rem;
     background-color: #FFD700; /* Goldgelb */
-    color: #1c1c1c; /* Dunkler Text für gelben Button */
+    color: #333; /* Dunkler Text für gelben Button */
     border: none;
     border-radius: 6px;
     font-size: 1.1rem;
@@ -114,7 +114,7 @@ button[type="submit"]:hover {
 }
 
 .result-item {
-    border-bottom: 1px solid #444; /* Dunklerer Trennstrich */
+    border-bottom: 1px solid #eee; /* Hellerer Trennstrich */
     padding: 1rem 0;
 }
 .result-item:last-child {
@@ -128,11 +128,12 @@ button[type="submit"]:hover {
 .game-title-link {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #FFD700; /* Goldgelb für Spieltitel */
+    color: #333; /* Dunklerer Text für Spieltitel */
     text-decoration: none;
 }
 .game-title-link:hover {
     text-decoration: underline;
+    color: #FFD700; /* Goldgelb für Hover */
 }
 
 .action-button {
@@ -141,7 +142,7 @@ button[type="submit"]:hover {
     margin-top: 8px;
     margin-right: 8px;
     background-color: #FFD700; /* Goldgelb */
-    color: #1c1c1c; /* Dunkler Text */
+    color: #333; /* Dunkler Text */
     text-decoration: none;
     border-radius: 5px;
     font-size: 0.9rem;
@@ -153,18 +154,18 @@ button[type="submit"]:hover {
 }
 
 .chat-button {
-    background-color: #A0522D; /* Brauner Ton, passt zu Gelb/Schwarz */
+    background-color: #e67e22; /* Orange */
 }
 .chat-button:hover {
-    background-color: #8B4513; /* Dunklerer Brauner Ton */
+    background-color: #d35400; /* Dunkleres Orange */
 }
 
 .guest-button {
-    background-color: #777; /* Grau für Gast-Login-Button */
-    color: #f5f7fa;
+    background-color: #ccc; /* Hellgrau für Gast-Login-Button */
+    color: #333;
 }
 .guest-button:hover {
-    background-color: #555;
+    background-color: #bbb;
 }
 
 
@@ -175,7 +176,7 @@ button[type="submit"]:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Dunklerer, undurchsichtiger Hintergrund */
+    background-color: rgba(0, 0, 0, 0.6); /* Standard dunklerer Hintergrund */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -183,18 +184,18 @@ button[type="submit"]:hover {
 }
 
 .modal-content {
-    background-color: #1c1c1c; /* Dunklerer Hintergrund für Modal */
+    background-color: #FFFFFF; /* Weißer Hintergrund für Modal */
     padding: 2rem;
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
     height: 80%;
     max-height: 600px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7); /* Dunklerer Schatten */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     position: relative;
     display: flex;
     flex-direction: column;
-    color: #f5f7fa; /* Heller Text im Modal */
+    color: #333; /* Dunkler Text im Modal */
 }
 
 .modal-close-btn {
@@ -205,19 +206,19 @@ button[type="submit"]:hover {
     background: none;
     border: none;
     cursor: pointer;
-    color: #FFD700; /* Goldgelb für Schließen-Button */
+    color: #888; /* Standardgrau für Schließen-Button */
 }
 
 #chat-messages {
     flex-grow: 1;
-    border: 1px solid #555; /* Dunklerer Rand */
+    border: 1px solid #ddd; /* Hellerer Rand */
     border-radius: 5px;
     padding: 1rem;
     overflow-y: auto;
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
-    background-color: #333; /* Dunklerer Hintergrund für Chat-Bereich */
+    background-color: #f8f8f8; /* Sehr heller Hintergrund für Chat-Bereich */
 }
 
 #chat-form {
@@ -236,7 +237,7 @@ button[type="submit"]:hover {
 #chat-form button {
     width: auto;
     background-color: #FFD700; /* Goldgelb */
-    color: #1c1c1c; /* Dunkler Text */
+    color: #333; /* Dunkler Text */
 }
 
 #chat-form button:hover {
@@ -253,31 +254,31 @@ button[type="submit"]:hover {
 
 .sent {
     background-color: #FFD700; /* Goldgelb für gesendete Nachrichten */
-    color: #1c1c1c; /* Dunkler Text */
+    color: #333; /* Dunkler Text */
     align-self: flex-end;
     border-bottom-right-radius: 3px;
 }
 
 .received {
-    background-color: #555; /* Dunkler Grau-Ton für empfangene Nachrichten */
-    color: #f5f7fa; /* Heller Text */
+    background-color: #ecf0f1; /* Heller Grau-Ton für empfangene Nachrichten */
+    color: #333; /* Dunkler Text */
     align-self: flex-start;
     border-bottom-left-radius: 3px;
 }
 
 /* --- Stile für das Postfach --- */
 #inbox-notifications {
-    background-color: #333; /* Dunklerer Hintergrund */
+    background-color: #fffacd; /* Hellgelb (Lemon Chiffon) */
     border: 1px solid #FFD700; /* Goldgelber Rand */
     border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 2rem;
-    color: #f5f7fa; /* Heller Text */
+    color: #333; /* Dunkler Text */
 }
 
 #inbox-notifications h4 {
     margin-top: 0;
-    color: #FFD700; /* Goldgelb */
+    color: #333; /* Dunkler Text */
 }
 
 #inbox-notifications ul {
@@ -294,5 +295,5 @@ button[type="submit"]:hover {
 }
 
 #inbox-notifications li:hover {
-    background-color: #444; /* Etwas hellerer Schwarz-Ton für Hover */
+    background-color: #fff5be; /* Etwas dunkleres Hellgelb für Hover */
 }

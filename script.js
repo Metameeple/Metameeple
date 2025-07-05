@@ -215,7 +215,7 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
         if (!isNaN(dauer)) {
             // Dies ist die korrekte Logik für "kleiner oder gleich".
             console.log(`Filtering for max_dauer <= ${dauer}`); // DEBUG: Zeigt den Filterwert an
-            query = query.lte('max_dauer', dauer); 
+            query = query.gte('max_dauer', dauer); 
         } else {
             outputDiv.innerText = 'Bitte geben Sie eine maximale Dauer ein oder deaktivieren Sie den Filter.';
             return;

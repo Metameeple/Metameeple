@@ -5,8 +5,8 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #FFFFFF; /* Weißer Hintergrund */
-    color: #333; /* Dunklerer Text für weißen Hintergrund */
+    background-color: #f5f7fa; /* Reverted to original light gray */
+    color: #333;
     margin: 2rem auto;
     padding: 0 1.5rem;
     display: flex;
@@ -28,8 +28,8 @@ body {
 
 #logout-btn {
     padding: 8px 15px; /* Etwas kleinerer Padding als andere Buttons */
-    background-color: #FFD700; /* Goldgelb */
-    color: #333; /* Dunkler Text */
+    background-color: #2ecc71; /* Reverted to green */
+    color: white;
     border: none;
     border-radius: 6px;
     font-size: 0.9rem; /* Etwas kleinerer Font */
@@ -38,207 +38,214 @@ body {
 }
 
 #logout-btn:hover {
-    background-color: #FFA500; /* Orange-Gelb für Hover */
+    background-color: #27ae60; /* Darker green on hover */
 }
 
-/* Auth Section */
-#auth-section {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
-    max-width: 700px;
-    width: 100%;
-    padding: 2rem;
-    margin: 0 auto 1.5rem auto;
-}
-
-/* Buttons */
-.action-button {
-    background-color: #FFD700; /* Goldgelb */
-    color: #333; /* Dunkler Text */
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    text-decoration: none; /* Für Links, die wie Buttons aussehen */
-    display: inline-block; /* Für Links, die wie Buttons aussehen */
-    text-align: center;
-    margin-top: 15px;
-}
-
-.action-button:hover {
-    background-color: #FFA500; /* Orange-Gelb für Hover */
-    transform: translateY(-1px);
-}
-
-.guest-button {
-    background-color: #f0f0f0;
-    color: #555;
-    margin-top: 10px; /* Separater Abstand für den Gast-Button */
-}
-
-.guest-button:hover {
-    background-color: #e0e0e0;
-}
-
-/* Forms and Output Containers */
 form, .output-container {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
     max-width: 700px;
-    width: 100%;
+    width: 100%; /* damit es responsive bleibt */
     padding: 2rem;
-    margin: 0 auto 1.5rem auto;
+    margin: 0 auto 1.5rem auto; /* zentriert und margin unten */
 }
 
 .output-container {
     padding-top: 1rem;
     padding-bottom: 1rem;
-    white-space: pre-wrap; /* Behält Leerzeichen und Zeilenumbrüche */
+    white-space: pre-wrap;
 }
 
-h1, h2, h3 {
-    color: #2c3e50; /* Dunklerer Titel */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 700px;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+h1 {
+    color: #34495e;
     text-align: center;
     margin-bottom: 1.5rem;
 }
 
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="password"],
-textarea {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 1rem;
-    box-sizing: border-box; /* Sicherstellen, dass Padding in die Breite passt */
+h2 {
+    color: #34495e;
+    text-align: center;
+    margin-bottom: 1.5rem;
 }
 
-input[type="checkbox"] {
-    margin-right: 10px; /* Abstand zur Beschriftung */
-    transform: scale(1.2); /* Checkbox etwas größer machen */
+h3 {
+    color: #34495e;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    width: 100%; /* Ensure h3 takes full width for centering */
 }
 
 label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    background-color: #3498db; /* Reverted to blue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+}
+
+.action-button {
     display: inline-block;
-    margin-bottom: 10px;
-    font-weight: bold;
+    padding: 0.8rem 1.2rem;
+    background-color: #2ecc71; /* Reverted to green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-decoration: none; /* For anchor tags styled as buttons */
+    text-align: center;
 }
 
-.filter-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px; /* Abstand zwischen Filtergruppen */
+.action-button:hover {
+    background-color: #27ae60; /* Darker green on hover */
 }
 
-.filter-group label {
-    margin-bottom: 0; /* Entfernt den unteren Rand der Labels in Filtergruppen */
-    flex-shrink: 0; /* Verhindert, dass das Label kleiner wird */
+.guest-button {
+    background-color: #95a5a6; /* Grauer Button */
 }
 
-.filter-group input[type="number"] {
-    margin-bottom: 0; /* Entfernt den unteren Rand der Inputfelder in Filtergruppen */
-    flex-grow: 1; /* Lässt das Inputfeld den verbleibenden Platz einnehmen */
-    margin-left: 10px; /* Abstand zwischen Label und Inputfeld */
+.guest-button:hover {
+    background-color: #7f8c8d; /* Dunkleres Grau für Hover */
 }
 
+.error-message {
+    color: red;
+    margin-top: 1rem;
+    text-align: center;
+}
 
-/* Styling für Ergebnisse */
+.success-message {
+    color: green;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/* Stile für das In-App-Bereich */
+#app {
+    width: 100%;
+    max-width: 700px;
+}
+
+#app h3 {
+    text-align: left; /* Überschriften im App-Bereich linksbündig */
+    margin-bottom: 1rem;
+}
+
+/* Stil für Suchergebnisse (Mitspieler finden) */
 .result-item {
-    border-bottom: 1px solid #eee;
-    padding: 1rem 0; /* Slightly more padding for separation */
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
     display: flex;
-    flex-direction: row-reverse; /* Puts the last item (image) on the right */
-    align-items: flex-start; /* Aligns content and image to the top */
-    gap: 20px; /* Space between text content and image */
-    flex-wrap: wrap; /* Allows items to wrap on smaller screens */
-    position: relative; /* Needed for absolute positioning of image if preferred later */
+    flex-wrap: wrap; /* Allow content to wrap */
+    justify-content: space-between; /* Distribute space between image and content */
+    align-items: flex-start; /* Align items to the start */
+    position: relative; /* For absolute positioning of image */
+    padding-right: 120px; /* Make space for the image */
 }
 
-.result-item:last-child {
-    border-bottom: none;
+.result-item p {
+    margin: 0.5rem 0;
+    color: #555;
 }
 
-/* Container for text content */
-.game-content {
-    flex-grow: 1; /* Allows text content to take up available space */
-    margin-right: 0; /* Ensures no extra margin on the right of content */
+/* Styling for game recommendation results */
+#output-recommendation .result-item {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    padding-right: 120px; /* Space for the image */
 }
 
-.game-content p {
-    margin: 0 0 0.5em 0; /* Small margin below paragraphs, adjust as needed */
-    line-height: 1.4; /* Improves readability */
+#output-recommendation .result-item h4 {
+    color: #34495e;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    width: calc(100% - 110px); /* Account for image width */
 }
 
-.game-content p:last-of-type {
-    margin-bottom: 0; /* No margin below the last paragraph */
+#output-recommendation .result-item p {
+    margin-bottom: 0.5rem; /* Small paragraphs between infos */
+    color: #555;
+    width: calc(100% - 110px); /* Account for image width */
 }
 
-
-/* Styling for the game title */
-.game-title-link {
-    font-size: 1.4rem; /* Slightly larger title */
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
-    display: block; /* Ensures title takes its own line */
-    margin-bottom: 0.5rem; /* Space after the title */
-}
-
-.game-title-link:hover {
-    text-decoration: underline;
-    color: #FFD700;
-}
-
-/* Styling for the game image */
 .game-image {
-    max-width: 150px; /* Max width for the image */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    max-width: 100px;
     height: auto;
-    border-radius: 8px; /* Slightly more rounded corners for the image */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Stronger shadow for image */
-    object-fit: contain; /* Ensures the whole image is visible */
-    flex-shrink: 0; /* Prevent image from shrinking */
-    margin-top: 0; /* Align image to the top of its container */
+    border-radius: 5px;
+    z-index: 1;
 }
 
-/* Adjust button margin if necessary */
-.result-item .action-button {
-    margin-top: 10px; /* Add some space above the button */
-    margin-bottom: 0; /* Remove bottom margin if present */
+.game-actions {
+    width: 100%; /* Take full width */
+    text-align: right; /* Right align content */
+    margin-top: 1rem; /* Space from description */
 }
 
-/* For smaller screens, stack elements */
-@media (max-width: 600px) {
-    .result-item {
-        flex-direction: column; /* Stack items vertically on small screens */
-        align-items: center; /* Center items when stacked */
-        text-align: center;
-    }
-
-    .game-image {
-        margin-bottom: 15px; /* Add space below image when stacked */
-    }
-
-    .game-content {
-        margin-right: 0;
-    }
+.game-actions .action-button {
+    margin-left: 0.5rem; /* Space between buttons if multiple */
 }
 
 
-/* --- Chat Modal --- */
+/* Chat Modal Styles */
 .modal-backdrop {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -250,12 +257,12 @@ label {
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    width: 90%;
     max-width: 500px;
-    position: relative;
+    width: 90%;
     display: flex;
     flex-direction: column;
-    max-height: 80vh; /* Begrenzt die Höhe des Modals */
+    max-height: 80vh;
+    position: relative;
 }
 
 .modal-close-btn {
@@ -295,12 +302,12 @@ label {
 
 #chat-form button {
     width: auto;
-    background-color: #FFD700; /* Goldgelb */
-    color: #333; /* Dunkler Text */
+    background-color: #3498db; /* Reverted to blue */
+    color: white;
 }
 
 #chat-form button:hover {
-    background-color: #FFA500; /* Orange-Gelb für Hover */
+    background-color: #2980b9; /* Darker blue on hover */
 }
 
 .chat-message {
@@ -312,54 +319,66 @@ label {
 }
 
 .sent {
-    background-color: #FFD700; /* Goldgelb für gesendete Nachrichten */
-    color: #333; /* Dunkler Text */
+    background-color: #3498db; /* Reverted to blue */
+    color: white;
     align-self: flex-end;
     border-bottom-right-radius: 3px;
 }
 
 .received {
-    background-color: #ecf0f1; /* Heller Grau-Ton für empfangene Nachrichten */
-    color: #333; /* Dunkler Text */
+    background-color: #ecf0f1;
+    color: #333;
     align-self: flex-start;
     border-bottom-left-radius: 3px;
 }
 
 /* --- Stile für das Postfach --- */
 #inbox-notifications {
-    background-color: #fffacd; /* Hellgelb (Lemon Chiffon) */
-    border: 1px solid #FFD700; /* Goldgelber Rahmen */
+    background-color: #fffacd;
+    border: 1px solid #FFD700;
     border-radius: 8px;
     padding: 1rem;
     margin-top: 20px;
-    max-width: 700px;
-    width: 100%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-#inbox-notifications h4 {
-    margin-top: 0;
-    color: #b8860b; /* Dunklerer Goldton */
+#inbox-notifications p {
+    margin: 0.5rem 0;
+    color: #555;
+    font-weight: bold;
 }
 
 #inbox-notifications ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin-top: 1rem;
 }
 
 #inbox-notifications li {
-    padding: 8px 0;
-    border-bottom: 1px dotted #FFD700; /* Gepunktete Linie */
-    cursor: pointer;
-    color: #555;
-    transition: color 0.2s ease;
+    background-color: #ffffe0; /* Hellgelber Hintergrund für Nachrichten */
+    padding: 10px;
+    border-bottom: 1px solid #FFD700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #inbox-notifications li:last-child {
     border-bottom: none;
 }
 
-#inbox-notifications li:hover {
-    color: #b8860b; /* Dunklerer Goldton beim Hover */
+#inbox-notifications button {
+    background-color: #FFA500; /* Orange für Aktionen */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.2s ease;
+}
+
+#inbox-notifications button:hover {
+    background-color: #FF8C00; /* Dunkleres Orange */
 }

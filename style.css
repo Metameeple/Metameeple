@@ -140,38 +140,62 @@ button[type="submit"]:hover {
     margin-bottom: 0;
 }
 
+/* *** NEUE & ANGEPASSTE STILE FÜR DAS EMPFEHLUNGS-LAYOUT *** */
+
 .result-item {
-    border-bottom: 1px solid #eee; /* Hellerer Trennstrich */
-    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+    padding: 1.5rem 0;
 }
 .result-item:last-child {
     border-bottom: none;
-}
-
-.result-item p {
-    margin: 0.2rem 0;
+    padding-bottom: 0.5rem;
 }
 
 .game-title-link {
-    font-size: 1.2rem;
+    font-size: 1.4rem; /* Titel etwas größer */
     font-weight: bold;
-    color: #333; /* Dunklerer Text für Spieltitel */
+    color: #333;
     text-decoration: none;
+    display: block; /* Eigene Zeile für den Titel */
+    margin-bottom: 1rem; /* Abstand nach unten */
 }
 .game-title-link:hover {
     text-decoration: underline;
-    color: #FFD700; /* Goldgelb für Hover */
+    color: #FFD700;
 }
 
-/* Neuer Stil für Spielbilder */
-.game-image {
-    max-width: 150px; /* Maximale Breite des Bildes */
-    height: auto; /* Höhe automatisch anpassen */
-    display: block; /* Bild als Blockelement anzeigen */
-    margin: 10px 0; /* Abstand über und unter dem Bild */
-    border-radius: 5px; /* Abgerundete Ecken */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Leichter Schatten */
+/* Flex-Container für Bild und Details */
+.result-item-content {
+    display: flex;
+    gap: 20px; /* Abstand zwischen Bild und Text */
+    align-items: flex-start; /* Oben ausrichten */
 }
+
+/* Bild-Styling */
+.game-image {
+    max-width: 150px;
+    height: auto;
+    display: block;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0; /* Alte Margins entfernen */
+    flex-shrink: 0; /* Verhindert, dass das Bild schrumpft */
+}
+
+/* Container für die Text-Details */
+.result-item-details {
+    flex: 1; /* Füllt den restlichen Platz */
+}
+
+.result-item-details p {
+    margin: 0 0 0.6rem 0; /* Angepasste Abständer der Paragraphen */
+    white-space: normal; /* Erlaubt Textumbruch in der Beschreibung */
+}
+
+.result-item-details .action-button {
+    margin-top: 1rem; /* Abstand über dem Kauf-Button */
+}
+/* *** ENDE DER NEUEN STILE *** */
 
 
 .action-button {

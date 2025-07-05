@@ -71,7 +71,7 @@ header {
     max-width: 700px;
     width: 100%;
     margin: 0 auto 2rem auto;
-    padding: 0 2rem;
+    padding: 0; /* Remove padding here as it's already on body */
 }
 
 header h1 {
@@ -142,14 +142,35 @@ button[type="submit"]:hover {
 
 .result-item {
     border-bottom: 1px solid #eee; /* Hellerer Trennstrich */
-    padding: 1rem 0;
+    padding: 0.5rem 0; /* Reduced padding for less spacing */
+    display: flex; /* Use flexbox for item layout */
+    align-items: flex-start; /* Align items to the top */
+    gap: 15px; /* Space between content and image */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
+
 .result-item:last-child {
     border-bottom: none;
 }
 
 .result-item p {
-    margin: 0.2rem 0;
+    margin: 0; /* Remove default paragraph margin */
+}
+
+.result-item .game-image {
+    order: 2; /* Move image to the right */
+    max-width: 150px; /* Max width for image */
+    height: auto;
+    display: block;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0; /* Remove margin from image */
+}
+
+/* Ensure text content takes up remaining space */
+.result-item .text-content {
+    flex-grow: 1;
+    order: 1; /* Keep text content to the left */
 }
 
 .game-title-link {
@@ -157,7 +178,10 @@ button[type="submit"]:hover {
     font-weight: bold;
     color: #333; /* Dunklerer Text für Spieltitel */
     text-decoration: none;
+    display: block; /* Make title a block element for better spacing control */
+    margin-bottom: 0.3rem; /* Small space after title */
 }
+
 .game-title-link:hover {
     text-decoration: underline;
     color: #FFD700; /* Goldgelb für Hover */
@@ -173,48 +197,42 @@ button[type="submit"]:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Leichter Schatten */
 }
 
-
 .action-button {
     display: inline-block;
     padding: 6px 12px;
-    margin-top: 8px;
-    margin-right: 8px;
-    background-color: #FFD700; /* Goldgelb */
-    color: #333; /* Dunkler Text */
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 0.9rem;
+    background-color: #FFD700;
+    color: #333;
     border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
     cursor: pointer;
-}
-.action-button:hover {
-    background-color: #FFA500; /* Orange-Gelb für Hover */
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+    margin-bottom: 10px; /* For buttons in a row */
 }
 
-.chat-button {
-    background-color: #e67e22; /* Orange */
-}
-.chat-button:hover {
-    background-color: #d35400; /* Dunkleres Orange */
+.action-button:hover {
+    background-color: #FFA500;
 }
 
 .guest-button {
-    background-color: #ccc; /* Hellgrau für Gast-Login-Button */
-    color: #333;
+    background-color: #f0f0f0; /* Hellgrau für Gast-Button */
+    color: #555;
 }
+
 .guest-button:hover {
-    background-color: #bbb;
+    background-color: #e0e0e0;
 }
 
-
-/* --- Stile für das Chat Modal --- */
+/* --- Modal Stile --- */
 .modal-backdrop {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Standard dunklerer Hintergrund */
+    background-color: rgba(0, 0, 0, 0.6); /* Dunklere Überlagerung */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -222,41 +240,39 @@ button[type="submit"]:hover {
 }
 
 .modal-content {
-    background-color: #FFFFFF; /* Weißer Hintergrund für Modal */
+    background-color: #fff;
     padding: 2rem;
     border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
-    height: 80%;
-    max-height: 600px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
     position: relative;
     display: flex;
     flex-direction: column;
-    color: #333; /* Dunkler Text im Modal */
+    max-height: 80%; /* Begrenze die Höhe des Modals */
 }
 
 .modal-close-btn {
     position: absolute;
     top: 10px;
-    right: 15px;
-    font-size: 2rem;
+    right: 10px;
     background: none;
     border: none;
+    font-size: 1.5rem;
     cursor: pointer;
-    color: #888; /* Standardgrau für Schließen-Button */
+    color: #888;
 }
 
 #chat-messages {
     flex-grow: 1;
-    border: 1px solid #ddd; /* Hellerer Rand */
+    border: 1px solid #ddd;
     border-radius: 5px;
     padding: 1rem;
     overflow-y: auto;
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
-    background-color: #f8f8f8; /* Sehr heller Hintergrund für Chat-Bereich */
+    background-color: #f8f8f8;
 }
 
 #chat-form {
@@ -309,29 +325,41 @@ button[type="submit"]:hover {
     background-color: #fffacd; /* Hellgelb (Lemon Chiffon) */
     border: 1px solid #FFD700; /* Goldgelber Rand */
     border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    color: #333; /* Dunkler Text */
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    max-width: 700px;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 #inbox-notifications h4 {
     margin-top: 0;
-    color: #333; /* Dunkler Text */
+    color: #555;
 }
 
 #inbox-notifications ul {
-    list-style-type: none;
-    padding-left: 0;
+    list-style: none;
+    padding: 0;
     margin: 0;
 }
 
 #inbox-notifications li {
-    padding: 8px;
-    border-radius: 5px;
+    padding: 8px 0;
+    border-bottom: 1px solid #ffe8b3; /* Hellerer Goldton für Trennlinie */
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    color: #333;
+}
+
+#inbox-notifications li:last-child {
+    border-bottom: none;
 }
 
 #inbox-notifications li:hover {
-    background-color: #fff5be; /* Etwas dunkleres Hellgelb für Hover */
+    background-color: #ffe08a; /* Dunklerer Goldton beim Hover */
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.chat-button {
+    margin-left: auto; /* pushes button to the right */
 }

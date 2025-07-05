@@ -16,7 +16,8 @@ body {
     max-width: 100%;
 }
 
-form, .output-container {
+/* Angepasst: #show-auth-btn hinzugefügt */
+form, .output-container, #show-auth-btn {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
@@ -47,7 +48,7 @@ header h1 {
     margin: 0;
 }
 
-input[type="email"], input[type="password"], input[type="text"], input[type="number"], textarea {
+input[type="email"], input[type="password"], input[type="text"], input[type="number"] {
     width: 100%;
     padding: 0.55rem 0.75rem;
     margin-top: 0.4rem;
@@ -58,7 +59,7 @@ input[type="email"], input[type="password"], input[type="text"], input[type="num
     transition: border-color 0.3s ease;
 }
 
-input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus, input[type="number"]:focus {
     border-color: #3498db;
     outline: none;
 }
@@ -128,7 +129,7 @@ button[type="submit"]:hover {
     background-color: #d35400;
 }
 
-/* Stil für den Gast-Button */
+/* NEU: Stil für den Gast-Button */
 .guest-button {
     background-color: #6c757d; /* Grau */
     width: 100%; /* Macht den Button so breit wie die anderen Formular-Buttons */
@@ -141,31 +142,6 @@ button[type="submit"]:hover {
 .guest-button:hover {
     background-color: #5a6268; /* Dunkleres Grau beim Hover */
 }
-
-/* Stil für Filtergruppen (Checkboxes und Inputs) */
-.filter-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.filter-group label {
-    margin-right: 10px;
-    min-width: 120px; /* Für bessere Ausrichtung */
-}
-
-.filter-group input[type="checkbox"] {
-    width: auto;
-    margin-right: 10px;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.filter-group input[type="number"] {
-    flex-grow: 1; /* Nimmt den restlichen Platz ein */
-    margin-bottom: 0; /* Entfernt den Standard-Margin-Bottom */
-}
-
 
 /* --- Stile für das Chat Modal --- */
 .modal-backdrop {

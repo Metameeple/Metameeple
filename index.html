@@ -10,54 +10,68 @@
     <h1>Brettspiel Community</h1>
     <img src="logo.png" alt="Logo" style="width: 150px;" />
 
-    <form id="register-form">
-        <h2>Registrieren</h2>
-        <input type="email" id="register-email" placeholder="E-Mail" required />
-        <input type="password" id="register-password" placeholder="Passwort" required />
-        <input type="text" id="register-nickname" placeholder="Nickname (öffentlich sichtbar)" required />
-        <input type="number" id="register-age" placeholder="Dein Alter" required />
-        <input type="text" id="register-region" placeholder="Region" required />
-        <input type="text" id="register-favorite-game" placeholder="Lieblingsspiel" required />
-        <button type="submit">Registrieren</button>
-        <button type="button" id="guest-login-btn" class="action-button guest-button" style="margin-top: 10px;">Als Gast fortfahren</button>
+    <h3 style="margin-top: 40px;">Spiel empfehlen lassen</h3>
+    <form id="recommend-form">
+        <div class="filter-group">
+            <input type="checkbox" id="enable-spieleranzahl" checked>
+            <label for="enable-spieleranzahl">Spieleranzahl:</label>
+            <input type="number" id="spieleranzahl" placeholder="Spieleranzahl" required />
+        </div>
+        <div class="filter-group">
+            <input type="checkbox" id="enable-dauer" checked>
+            <label for="enable-dauer">Max. Dauer (Minuten):</label>
+            <input type="number" id="dauer" placeholder="Max. Dauer in Minuten" required />
+        </div>
+        <div class="filter-group">
+            <input type="checkbox" id="enable-min-age" checked>
+            <label for="enable-min-age">Mindestalter:</label>
+            <input type="number" id="min-age" placeholder="Mindestalter" required />
+        </div>
+        <button type="submit">Empfehlen</button>
     </form>
+    <div id="output-recommend" class="output-container"></div>
 
-    <form id="login-form" style="margin-top: 20px;">
-        <h2>Login</h2>
-        <input type="email" id="login-email" placeholder="E-Mail" required />
-        <input type="password" id="login-password" placeholder="Passwort" required />
-        <button type="submit">Login</button>
-    </form>
+    <div id="auth-container">
+        <form id="register-form">
+            <h2>Registrieren</h2>
+            <input type="email" id="register-email" placeholder="E-Mail" required />
+            <input type="password" id="register-password" placeholder="Passwort" required />
+            <input type="text" id="register-nickname" placeholder="Nickname (öffentlich sichtbar)" required />
+            <input type="number" id="register-age" placeholder="Dein Alter" required />
+            <input type="text" id="register-region" placeholder="Region" required />
+            <input type="text" id="register-favorite-game" placeholder="Lieblingsspiel" required />
+            <button type="submit">Registrieren</button>
+            <button type="button" id="guest-login-btn" class="action-button guest-button" style="margin-top: 10px;">Als Gast fortfahren</button>
+        </form>
+
+        <form id="login-form" style="margin-top: 20px;">
+            <h2>Login</h2>
+            <input type="email" id="login-email" placeholder="E-Mail" required />
+            <input type="password" id="login-password" placeholder="Passwort" required />
+            <button type="submit">Login</button>
+        </form>
+    </div>
 
     <div id="app" style="display: none; margin-top: 20px;">
         <button id="logout-btn" style="float: right;">Ausloggen</button>
        
         <div id="inbox-notifications"></div>
 
-        <h3>Spiel empfehlen lassen</h3>
-        <form id="recommend-form">
-            <input type="number" id="spieleranzahl" placeholder="Spieleranzahl" required />
-            <input type="number" id="dauer" placeholder="Max. Dauer in Minuten" required />
-            <input type="number" id="min-age" placeholder="Mindestalter" required />
-            <button type="submit">Empfehlen</button>
-        </form>
-        <div id="output-recommend" class="output-container"></div>
-
         <h3 style="margin-top: 40px;">KI-Spiele-Generator</h3>
         
-<form id="ai-form">
-    <label for="equipment-input">Welches Spielmaterial hast du?</label>
-    <textarea 
-        id="equipment-input" 
-        rows="4" 
-        placeholder="z.B. 6 Würfel, 1 Satz Spielkarten, 50 Münzen, 1 leeres Blatt Papier..."
-        required></textarea>
-    <button type="submit">Vorschlag generieren</button>
-</form>
-<div id="ai-output" class="output-container" style="display: none;">
-    <div id="ai-loading" style="display: none;">Generiere kreative Ideen... 🧠</div>
-    <div id="ai-result"></div>
-</div>
+        <form id="ai-form">
+            <label for="equipment-input">Welches Spielmaterial hast du?</label>
+            <textarea 
+                id="equipment-input" 
+                rows="4" 
+                placeholder="z.B. 6 Würfel, 1 Satz Spielkarten, 50 Münzen, 1 leeres Blatt Papier..."
+                required></textarea>
+            <button type="submit">Vorschlag generieren</button>
+        </form>
+        <div id="ai-output" class="output-container" style="display: none;">
+            <div id="ai-loading" style="display: none;">Generiere kreative Ideen... 🧠</div>
+            <div id="ai-result"></div>
+        </div>
 
         <h3 style="margin-top: 40px;">Mitspieler finden</h3>
         <form id="match-form">

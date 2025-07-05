@@ -252,20 +252,23 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
             }
 
             // Wenn eine Beschreibung in der Datenbank vorhanden ist, wird diese angezeigt.
-            // Die dynamische Generierung eines Satzes von Gemini auf Client-Seite für jedes Spiel
-            // ist in dieser Umgebung nicht direkt umsetzbar.
-            const descriptionHtml = r.description ? `<p>${r.description}</p>` : `<p>[Beschreibung: Eine dynamische Generierung durch Gemini ist hier nicht direkt integriert.]</p>`;
+            const descriptionHtml = r.description ? `<p>${r.description}</p>` : '';
 
             console.log(`Game: ${r.spiel}, Returned max_dauer: ${r.max_dauer}`); // DEBUG: Zeigt die zurückgegebene max_dauer an
 
+            // *** NEUE HTML-STRUKTUR FÜR DAS LAYOUT ***
             itemDiv.innerHTML = `
-                ${imageHtml}
                 <a href="${r.BGG}" target="_blank" class="game-title-link">${r.spiel}</a>
-                ${descriptionHtml}
-                <p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p>
-                <p><strong>Komplexität:</strong> ${r.Komplexität || 'N/A'}</p>
-                <p><strong>Max. Dauer:</strong> ${r.max_dauer || 'N/A'} Minuten</p>
-                <a href="${r.Buy}" target="_blank" class="action-button">Bei Amazon kaufen</a>
+                <div class="result-item-content">
+                    ${imageHtml}
+                    <div class="result-item-details">
+                        ${descriptionHtml}
+                        <p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p>
+                        <p><strong>Komplexität:</strong> ${r.Komplexität || 'N/A'}</p>
+                        <p><strong>Max. Dauer:</strong> ${r.max_dauer || 'N/A'} Minuten</p>
+                        <a href="${r.Buy}" target="_blank" class="action-button">Bei Amazon kaufen</a>
+                    </div>
+                </div>
             `; 
             outputDiv.appendChild(itemDiv); 
         }); 

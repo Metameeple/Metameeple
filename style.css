@@ -360,9 +360,8 @@ button[type="submit"]:hover {
     background-color: #fff5be; /* Etwas dunkleres Hellgelb für Hover */
 }
 
-
-/* ======================= ANFANG: NEUER CODE ======================= */
-/* --- Stile für Sortier-Buttons --- */
+/* ======================= ANFANG: AKTUALISIERTER CODE ======================= */
+/* --- Stile für Sortier-Buttons (Version 2.0 - Minimalistisch) --- */
 #sort-controls {
     max-width: 700px;
     width: 100%;
@@ -370,36 +369,49 @@ button[type="submit"]:hover {
     flex-wrap: wrap; 
     justify-content: flex-start;
     align-items: center;
-    gap: 8px;
+    gap: 4px 16px; /* Abstand zwischen den Elementen (vertikal und horizontal) */
     margin: -1rem auto 1.5rem auto;
     padding: 0 2rem;
 }
 
 #sort-controls span {
     font-weight: 600;
-    margin-right: 5px;
+    margin-right: 8px;
     font-size: 0.9rem;
+    color: #333;
 }
 
 #sort-controls button {
-    display: inline-block;
-    padding: 5px 10px;
-    background-color: #f0f0f0;
-    color: #333;
-    border-radius: 5px;
+    /* Button-Optik komplett zurücksetzen */
+    background: none;
+    border: none;
+    border-radius: 0;
+
+    /* Eine Linie unten für den Hover/Aktiv-Effekt vorbereiten */
+    border-bottom: 2px solid transparent;
+    
+    padding: 6px 2px; /* Etwas Luft nach oben/unten */
+    margin: 0;
+    
+    /* Text-Stil */
+    color: #555; /* Weicheres Grau für inaktive Elemente */
+    font-family: inherit;
     font-size: 0.9rem;
-    border: 1px solid #ccc;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s;
+
+    /* Sanfter Übergang */
+    transition: all 0.2s ease-in-out;
 }
 
 #sort-controls button:hover {
-    background-color: #e0e0e0;
+    color: #000;
+    border-bottom-color: #ccc; /* Graue Linie beim Hover */
 }
 
 #sort-controls button.active {
-    background-color: #FFD700; /* Goldgelb für aktiven Filter */
-    border-color: #FFA500;
-    font-weight: bold;
+    color: #333;
+    font-weight: 700; /* Fett für aktive Auswahl */
+    border-bottom-color: #FFD700; /* Goldene Linie, passend zum Theme */
 }
-/* ======================= ENDE: NEUER CODE ========================= */
+/* ======================= ENDE: AKTUALISIERTER CODE ========================= */

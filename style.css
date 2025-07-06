@@ -144,11 +144,11 @@ button[type="submit"]:hover {
 
 .result-item {
     border-bottom: 1px solid #eee;
-    padding: 0.75rem 0; /* Abstand zwischen den Spielen reduziert */
+    padding: 0.5rem 0; /* Stark reduzierter Abstand zwischen den Spielen */
 }
 .result-item:last-child {
     border-bottom: none;
-    padding-bottom: 0.25rem;
+    padding-bottom: 0;
 }
 
 .game-title-link {
@@ -157,7 +157,7 @@ button[type="submit"]:hover {
     color: #333;
     text-decoration: none;
     display: block;
-    margin-bottom: 0.5rem; /* Abstand vom Titel zum Bild reduziert */
+    margin-bottom: 0.4rem; /* Stark reduzierter Abstand vom Titel zum Bild */
 }
 .game-title-link:hover {
     text-decoration: underline;
@@ -167,11 +167,11 @@ button[type="submit"]:hover {
 /* Flex-Container für Bild und Details */
 .result-item-content {
     display: flex;
-    gap: 20px; /* Abstand zwischen Bild und Text */
-    align-items: center; /* GEÄNDERT: Text vertikal zum Bild zentrieren */
+    gap: 20px;
+    align-items: center;
 }
 
-/* NEU: Blauen Rand bei verlinkten Bildern entfernen */
+/* Blauen Rand bei verlinkten Bildern entfernen */
 .result-item-content a {
     border: none;
     text-decoration: none;
@@ -184,26 +184,24 @@ button[type="submit"]:hover {
     display: block;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin: 0; /* Alte Margins entfernen */
-    flex-shrink: 0; /* Verhindert, dass das Bild schrumpft */
+    margin: 0;
+    flex-shrink: 0;
 }
 
 /* Container für die Text-Details */
 .result-item-details {
-    flex: 1; /* Füllt den restlichen Platz */
+    flex: 1;
 }
 
 .result-item-details p {
-    margin: 0 0 0.3rem 0; /* GEÄNDERT: Reduzierter Abstand zwischen den Zeilen */
-    white-space: normal; /* Erlaubt Textumbruch in der Beschreibung */
+    margin: 0 0 0.15rem 0; /* Minimaler Abstand zwischen den Textzeilen */
+    white-space: normal;
 }
 
 .result-item-details .action-button {
-    margin-top: 1rem; /* Abstand über dem Kauf-Button */
+    margin-top: 0.5rem; /* Stark reduzierter Abstand über dem Kauf-Button */
 }
 /* *** ENDE DER NEUEN STILE *** */
-
-
 .action-button {
     display: inline-block;
     padding: 6px 12px;

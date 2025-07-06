@@ -185,10 +185,65 @@ document.getElementById('logout-btn').addEventListener('click', async () => {
 });
 
 
-// SPIELEMPFEHLUNG (mit korrigiertem Filter und Filter-Toggles)
+// ======================= ANFANG: ÜBERARBEITETER CODEBLOCK =======================
+
+// Globale Variable, um die aktuellen Empfehlungen zu speichern
+let currentRecommendations = [];
+
+// Hilfsfunktion, um Text-Komplexität in sortierbare Zahlen umzuwandeln
+function getComplexityValue(complexity) {
+    const complexityMap = {
+        'sehr leicht': 1,
+        'leicht': 2,
+        'mittel': 3,
+        'hoch': 4,
+        'sehr hoch': 5,
+        'experte': 6
+    };
+    return complexityMap[String(complexity).toLowerCase()] || 99; // Unbekannte Werte ans Ende
+}
+
+// NEU: Funktion, die die Spiele-Liste im HTML darstellt
+function renderRecommendations(recommendations) {
+    const outputDiv = document.getElementById('output-recommend');
+    outputDiv.innerHTML = '<h3>Empfohlene Spiele:</h3>'; // Container leeren und Überschrift setzen
+
+    if (!recommendations || recommendations.length === 0) {
+        outputDiv.innerHTML += '<p>Keine passenden Empfehlungen gefunden.</p>';
+        return;
+    }
+
+    recommendations.forEach(r => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'result-item';
+
+        let imageHtml = r.image_url ?
+            `<img src="${r.image_url}" alt="Bild von ${r.spiel}" class="game-image">` :
+            `<img src="https://via.placeholder.com/150?text=Kein+Bild" alt="Platzhalterbild" class="game-image">`;
+
+        const descriptionHtml = r.description ? `<p>${r.description}</p>` : '';
+
+        itemDiv.innerHTML = `
+            <a href="${r.BGG}" target="_blank" class="game-title-link">${r.spiel}</a>
+            <div class="result-item-content">
+                ${imageHtml}
+                <div class="result-item-details">
+                    ${descriptionHtml}
+                    <p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p>
+                    <p><strong>Komplexität:</strong> ${r.Komplexität || 'N/A'}</p>
+                    <p><strong>Max. Dauer:</strong> ${r.max_dauer || 'N/A'} Minuten</p>
+                    <a href="${r.Buy}" target="_blank" class="action-button">Bei Amazon kaufen</a>
+                </div>
+            </div>
+        `;
+        outputDiv.appendChild(itemDiv);
+    });
+}
+
+// ANGEPASST: Event-Listener für das Empfehlungs-Formular
 document.getElementById('recommend-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const anzahl = parseInt(document.getElementById('spieleranzahl').value);
     const dauer = parseInt(document.getElementById('dauer').value);
     const minAge = parseInt(document.getElementById('min-age').value);
@@ -198,82 +253,86 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
     const enableMinAge = document.getElementById('enable-min-age').checked;
 
     const outputDiv = document.getElementById('output-recommend');
+    const sortControls = document.getElementById('sort-controls');
+    
+    outputDiv.innerText = 'Suche nach Empfehlungen...';
+    sortControls.style.display = 'none'; // Sortier-Buttons während der Suche ausblenden
 
-    // HINWEIS: max_dauer wurde zur Select-Abfrage hinzugefügt, um sie anzuzeigen.
     let query = supabase.from('spielempfehlungen').select('spiel, Autor, Komplexität, BGG, Buy, image_url, description, max_dauer');
 
-    if (enableAnzahl) {
-        // Stellen Sie sicher, dass der Wert nur dann verwendet wird, wenn das Feld nicht leer ist
-        if (!isNaN(anzahl)) {
-             query = query.lte('min_spieler', anzahl).gte('max_spieler', anzahl);
-        } else {
-             outputDiv.innerText = 'Bitte geben Sie eine Spieleranzahl ein oder deaktivieren Sie den Filter.';
-             return;
-        }
+    if (enableAnzahl && !isNaN(anzahl)) {
+        query = query.lte('min_spieler', anzahl).gte('max_spieler', anzahl);
     }
-    if (enableDauer) {
-        if (!isNaN(dauer)) {
-            // Dies ist die korrekte Logik für "kleiner oder gleich".
-            console.log(`Filtering for max_dauer <= ${dauer}`); // DEBUG: Zeigt den Filterwert an
-            query = query.gte('max_dauer', dauer); 
-        } else {
-            outputDiv.innerText = 'Bitte geben Sie eine maximale Dauer ein oder deaktivieren Sie den Filter.';
-            return;
-        }
+    if (enableDauer && !isNaN(dauer)) {
+        query = query.gte('max_dauer', dauer);
     }
-    if (enableMinAge) {
-        if (!isNaN(minAge)) {
-            query = query.lte('Alter_min', minAge); // GEÄNDERT: gte zu lte
-        } else {
-            outputDiv.innerText = 'Bitte geben Sie ein Mindestalter ein oder deaktivieren Sie den Filter.';
-            return;
-        }
+    if (enableMinAge && !isNaN(minAge)) {
+        query = query.lte('Alter_min', minAge);
     }
 
     const { data: recommendations, error } = await query;
 
-    if (error) { 
-        outputDiv.innerText = 'Fehler: ' + error.message; 
-        return; 
+    if (error) {
+        outputDiv.innerText = 'Fehler: ' + error.message;
+        return;
     }
-    if (!recommendations || recommendations.length === 0) { 
-        outputDiv.innerText = 'Keine passenden Empfehlungen gefunden.'; 
-    } else { 
-        outputDiv.innerHTML = '<h3>Empfohlene Spiele:</h3>'; 
-        recommendations.forEach(r => { 
-            const itemDiv = document.createElement('div'); 
-            itemDiv.className = 'result-item'; 
-            
-            let imageHtml = '';
-            if (r.image_url) {
-                imageHtml = `<img src="${r.image_url}" alt="Bild von ${r.spiel}" class="game-image">`;
-            } else {
-                imageHtml = `<img src="https://via.placeholder.com/150?text=Kein+Bild" alt="Platzhalterbild" class="game-image">`;
-            }
-
-            // Wenn eine Beschreibung in der Datenbank vorhanden ist, wird diese angezeigt.
-            const descriptionHtml = r.description ? `<p>${r.description}</p>` : '';
-
-            console.log(`Game: ${r.spiel}, Returned max_dauer: ${r.max_dauer}`); // DEBUG: Zeigt die zurückgegebene max_dauer an
-
-            // *** NEUE HTML-STRUKTUR FÜR DAS LAYOUT ***
-            itemDiv.innerHTML = `
-                <a href="${r.BGG}" target="_blank" class="game-title-link">${r.spiel}</a>
-                <div class="result-item-content">
-                    ${imageHtml}
-                    <div class="result-item-details">
-                        ${descriptionHtml}
-                        <p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p>
-                        <p><strong>Komplexität:</strong> ${r.Komplexität || 'N/A'}</p>
-                        <p><strong>Max. Dauer:</strong> ${r.max_dauer || 'N/A'} Minuten</p>
-                        <a href="${r.Buy}" target="_blank" class="action-button">Bei Amazon kaufen</a>
-                    </div>
-                </div>
-            `; 
-            outputDiv.appendChild(itemDiv); 
-        }); 
+    
+    // Empfehlungen in der globalen Variable speichern
+    currentRecommendations = recommendations || [];
+    
+    // Sortier-Buttons nur anzeigen, wenn Ergebnisse vorhanden sind
+    if (currentRecommendations.length > 0) {
+        sortControls.style.display = 'flex';
     }
+    
+    // Ergebnisse zum ersten Mal rendern (unsortiert)
+    renderRecommendations(currentRecommendations);
 });
+
+// NEU: Event-Listener für die Sortier-Buttons
+document.getElementById('sort-controls').addEventListener('click', (e) => {
+    // Nur reagieren, wenn ein Button geklickt wurde
+    if (!e.target.matches('button')) return;
+
+    const sortKey = e.target.dataset.sort;
+    const sortOrder = e.target.dataset.order;
+
+    // Aktive-Klasse für visuellen Hinweis setzen
+    document.querySelectorAll('#sort-controls button').forEach(btn => btn.classList.remove('active'));
+    e.target.classList.add('active');
+
+    // Die Liste sortieren
+    currentRecommendations.sort((a, b) => {
+        let valA, valB;
+
+        switch (sortKey) {
+            case 'name':
+                valA = a.spiel.toLowerCase();
+                valB = b.spiel.toLowerCase();
+                break;
+            case 'duration':
+                valA = a.max_dauer || 0;
+                valB = b.max_dauer || 0;
+                break;
+            case 'complexity':
+                valA = getComplexityValue(a.Komplexität);
+                valB = getComplexityValue(b.Komplexität);
+                break;
+            default:
+                return 0;
+        }
+
+        if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+        if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+        return 0;
+    });
+    
+    // Liste neu mit der sortierten Reihenfolge rendern
+    renderRecommendations(currentRecommendations);
+});
+
+// ======================= ENDE: ÜBERARBEITETER CODEBLOCK =========================
+
 
 // ... Mitspieler finden (unverändert) ...
 document.getElementById('match-form').addEventListener('submit', async (e) => { e.preventDefault(); const region = document.getElementById('region').value; const spiel = document.getElementById('spiel').value; const outputDiv = document.getElementById('output-match'); const { data: { user } } = await supabase.auth.getUser(); if (!user) return; const { data: matches, error } = await supabase .from('profiles') .select('id, nickname, alter, region, favorite_game') .eq('region', region) .eq('favorite_game', spiel) .neq('id', user.id); if (error) { outputDiv.innerText = 'Fehler: ' + error.message; return; } if (matches.length === 0) { outputDiv.innerText = 'Keine passenden Mitspieler gefunden.'; } else { outputDiv.innerHTML = '<h3>Gefundene Mitspieler:</h3>'; matches.forEach(m => { const itemDiv = document.createElement('div'); itemDiv.className = 'result-item'; const text = document.createElement('p'); text.textContent = `${m.nickname} (Alter: ${m.alter}, Region: ${m.region})`; const chatBtn = document.createElement('button'); chatBtn.textContent = 'Chatten'; chatBtn.className = 'action-button chat-button'; chatBtn.dataset.receiverId = m.id; chatBtn.dataset.receiverNickname = m.nickname; chatBtn.onclick = () => openChat(m.id, m.nickname); itemDiv.appendChild(text); itemDiv.appendChild(chatBtn); outputDiv.appendChild(itemDiv); }); } });
@@ -369,12 +428,6 @@ document.getElementById('chat-form').addEventListener('submit', async (e) => {
     const sender_id = user.id;
     const receiver_id = document.getElementById('chat-modal').dataset.receiverId;
 
-    // --- DEBUGGING START ---
-    console.log("Sende Nachricht...");
-    console.log("Sender ID:", sender_id);
-    console.log("Receiver ID:", receiver_id);
-    // --- DEBUGGING ENDE ---
-    
     const { error } = await supabase.from('messages').insert({
         sender_id,
         receiver_id,
@@ -382,12 +435,8 @@ document.getElementById('chat-form').addEventListener('submit', async (e) => {
     });
 
     if (error) {
-   // --- DEBUGGING START ---
-// Zeige den exakten Fehler in der Entwicklerkonsole an!
         console.error('Supabase INSERT Error:', error);
-    // --- DEBUGGING ENDE ---     
         alert('Fehler beim Senden der Nachricht: ' + error.message);
-         
     } else {
         chatInput.value = '';
     }

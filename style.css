@@ -359,3 +359,47 @@ button[type="submit"]:hover {
 #inbox-notifications li:hover {
     background-color: #fff5be; /* Etwas dunkleres Hellgelb für Hover */
 }
+
+
+/* ======================= ANFANG: NEUER CODE ======================= */
+/* --- Stile für Sortier-Buttons --- */
+#sort-controls {
+    max-width: 700px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    margin: -1rem auto 1.5rem auto;
+    padding: 0 2rem;
+}
+
+#sort-controls span {
+    font-weight: 600;
+    margin-right: 5px;
+    font-size: 0.9rem;
+}
+
+#sort-controls button {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#sort-controls button:hover {
+    background-color: #e0e0e0;
+}
+
+#sort-controls button.active {
+    background-color: #FFD700; /* Goldgelb für aktiven Filter */
+    border-color: #FFA500;
+    font-weight: bold;
+}
+/* ======================= ENDE: NEUER CODE ========================= */

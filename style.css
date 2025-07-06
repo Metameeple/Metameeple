@@ -210,10 +210,30 @@ button[type="submit"]:hover {
     font-size: 0.9rem;
     border: none;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
 .action-button:hover {
     background-color: #FFA500; /* Orange-Gelb für Hover */
 }
+
+/* ======================= NEUER CODE ======================= */
+.frosted-btn {
+    background-color: #009fe3; /* Frosted-Games Hellblau */
+    color: #fff; /* Weißer Text für besseren Kontrast */
+}
+.frosted-btn:hover {
+    background-color: #007bb5; /* Etwas dunkleres Blau für Hover */
+}
+
+.info-text {
+    max-width: 700px;
+    width: 100%;
+    margin: -1.5rem auto 1.5rem auto; /* Positioniert den Text zwischen Sortierung und Ergebnissen */
+    padding: 0 2rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+/* ======================= ENDE ========================= */
 
 .chat-button {
     background-color: #e67e22; /* Orange */
@@ -360,7 +380,6 @@ button[type="submit"]:hover {
     background-color: #fff5be; /* Etwas dunkleres Hellgelb für Hover */
 }
 
-/* ======================= ANFANG: AKTUALISIERTER CODE ======================= */
 /* --- Stile für Sortier-Buttons (Version 2.0 - Minimalistisch) --- */
 #sort-controls {
     max-width: 700px;
@@ -370,48 +389,4 @@ button[type="submit"]:hover {
     justify-content: flex-start;
     align-items: center;
     gap: 4px 16px; /* Abstand zwischen den Elementen (vertikal und horizontal) */
-    margin: -1rem auto 1.5rem auto;
-    padding: 0 2rem;
-}
-
-#sort-controls span {
-    font-weight: 600;
-    margin-right: 8px;
-    font-size: 0.9rem;
-    color: #333;
-}
-
-#sort-controls button {
-    /* Button-Optik komplett zurücksetzen */
-    background: none;
-    border: none;
-    border-radius: 0;
-
-    /* Eine Linie unten für den Hover/Aktiv-Effekt vorbereiten */
-    border-bottom: 2px solid transparent;
-    
-    padding: 6px 2px; /* Etwas Luft nach oben/unten */
-    margin: 0;
-    
-    /* Text-Stil */
-    color: #555; /* Weicheres Grau für inaktive Elemente */
-    font-family: inherit;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-
-    /* Sanfter Übergang */
-    transition: all 0.2s ease-in-out;
-}
-
-#sort-controls button:hover {
-    color: #000;
-    border-bottom-color: #ccc; /* Graue Linie beim Hover */
-}
-
-#sort-controls button.active {
-    color: #333;
-    font-weight: 700; /* Fett für aktive Auswahl */
-    border-bottom-color: #FFD700; /* Goldene Linie, passend zum Theme */
-}
-/* ======================= ENDE: AKTUALISIERTER CODE ========================= */
+    margin: -1rem auto 1.5

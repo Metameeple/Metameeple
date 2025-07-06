@@ -1,494 +1,429 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+/* global box-sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
 
-const supabaseUrl = 'https://oywfzyfzpencghrpqfdk.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d2Z6eWZ6cGVuY2docnBxZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTc4ODUsImV4cCI6MjA2NDc5Mzg4NX0.OdMh5TH47gDdFYkWYQELxruXvdjhyLuMRfRjFJ1tywM';
-const supabase = createClient(supabaseUrl, supabaseKey);
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #FFFFFF; /* Weißer Hintergrund */
+    color: #333; /* Dunklerer Text für weißen Hintergrund */
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    max-width: 100%;
+}
 
-let chatSubscription = null;
+/* Neuer Container für den Logout Button */
+#logout-button-container {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    justify-content: flex-end; /* Button rechts ausrichten */
+    margin-top: 10px; /* Kleiner Abstand zum Logo */
+    margin-bottom: 20px; /* Abstand zu den nächsten Elementen */
+}
 
-// NEU: Funktion, um nach neuen Nachrichten zu suchen und das Postfach zu füllen
-async function checkForNewMessages() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+#logout-btn {
+    padding: 8px 15px; /* Etwas kleinerer Padding als andere Buttons */
+    background-color: #FFD700; /* Goldgelb */
+    color: #333; /* Dunkler Text */
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem; /* Etwas kleinerer Font */
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-    const inboxDiv = document.getElementById('inbox-notifications');
-    
-    // HIER IST DIE KORREKTUR IN DER SELECT-ANWEISUNG
-    const { data: messages, error } = await supabase
-        .from('messages')
-        .select('sender_id, profiles!sender_id ( id, nickname )') // Eindeutige Beziehung angegeben!
-        .eq('receiver_id', user.id)
-        .eq('is_read', false);
-
-    if (error) {
-        // Dieser Fehler sollte jetzt nicht mehr auftreten
-        console.error("Fehler bei der Postfach-Abfrage:", error);
-        inboxDiv.innerHTML = 'Fehler beim Laden des Postfachs.';
-        return;
-    }
-
-    if (!messages || messages.length === 0) {
-        inboxDiv.innerHTML = ''; // Keine Nachrichten, Postfach leeren/verstecken
-        return;
-    }
-
-    const senders = messages.reduce((acc, msg) => {
-        if (msg.profiles) {
-            const senderId = msg.profiles.id;
-            const senderNickname = msg.profiles.nickname;
-            if (!acc[senderId]) {
-                acc[senderId] = { nickname: senderNickname, count: 0 };
-            }
-            acc[senderId].count++;
-        }
-        return acc;
-    }, {});
-    
-    inboxDiv.innerHTML = '<h4>Neue Nachrichten:</h4>';
-    const list = document.createElement('ul');
-    for (const senderId in senders) {
-        const sender = senders[senderId];
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `<strong>${sender.nickname}</strong> (${sender.count} neue Nachricht${sender.count > 1 ? 'en' : ''})`;
-        listItem.onclick = () => openChat(senderId, sender.nickname);
-        list.appendChild(listItem);
-    }
-    inboxDiv.appendChild(list);
+#logout-btn:hover {
+    background-color: #FFA500; /* Orange-Gelb für Hover */
 }
 
 
-async function handleAuthChange(session) {
-    toggleUI(session);
-    if (session) {
-        // NEU: Nach dem Einloggen auf neue Nachrichten prüfen
-        await checkForNewMessages();
-    }
+form {
+    background-color: #FFFFFF; /* Weiße Hintergründe für Formulare und Output */
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1); /* Hellerer Schatten */
+    max-width: 700px;
+    width: 100%; /* damit es responsive bleibt */
+    padding: 2rem;
+    margin: 0 auto 1.5rem auto; /* zentriert und margin unten */
+    color: #333; /* Dunkler Text in Formularen */
 }
 
-function toggleUI(session) {
-    const app = document.getElementById('app');
-    const authSection = document.getElementById('auth-section'); 
-    const showAuthBtn = document.getElementById('show-auth-btn'); 
-    const logoutBtnContainer = document.getElementById('logout-button-container'); // NEU
-
-    if (session) {
-        app.style.display = 'block';
-        authSection.style.display = 'none'; 
-        showAuthBtn.style.display = 'none'; 
-        logoutBtnContainer.style.display = 'flex'; // NEU: Logout Button anzeigen
-    } else {
-        app.style.display = 'none';
-        authSection.style.display = 'none'; 
-        showAuthBtn.style.display = 'block'; 
-        logoutBtnContainer.style.display = 'none'; // NEU: Logout Button verstecken
-    }
+.output-container {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    width: 100%;
+    padding: 0.2rem 2rem 1rem 2rem; /* Reduzierter Abstand oben */
+    margin: 0 auto 1.5rem auto;
+    color: #333;
+    white-space: pre-wrap;
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    await handleAuthChange(session);
+h1, h2, h3, h4 {
+    color: #333; /* Dunkle Überschriften */
+}
 
-    supabase.auth.onAuthStateChange((_event, session) => {
-        handleAuthChange(session);
-    });
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto 2rem auto;
+    padding: 0 2rem;
+}
 
-    document.getElementById('chat-close-btn').addEventListener('click', closeChat);
-    document.getElementById('guest-login-btn').addEventListener('click', handleGuestLogin);
-    
-    // NEU: Event-Listener für den Button, der die Auth-Sektion zeigt
-    document.getElementById('show-auth-btn').addEventListener('click', () => {
-        document.getElementById('auth-section').style.display = 'block';
-        document.getElementById('show-auth-btn').style.display = 'none';
-    });
+header h1 {
+    font-size: 1.8rem;
+    margin: 0;
+}
 
-    // NEU: Event-Listener für Filter-Checkboxes
-    document.getElementById('enable-spieleranzahl').addEventListener('change', function() {
-        document.getElementById('spieleranzahl').disabled = !this.checked;
-        if (!this.checked) document.getElementById('spieleranzahl').value = '';
-    });
-    document.getElementById('enable-dauer').addEventListener('change', function() {
-        document.getElementById('dauer').disabled = !this.checked;
-        if (!this.checked) document.getElementById('dauer').value = '';
-    });
-    document.getElementById('enable-min-age').addEventListener('change', function() {
-        document.getElementById('min-age').disabled = !this.checked;
-        if (!this.checked) document.getElementById('min-age').value = '';
-    });
+input[type="email"], input[type="password"], input[type="text"], input[type="number"], textarea {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    margin-top: 0.4rem;
+    margin-bottom: 1rem;
+    border: 1px solid #bbb; /* Standardgrauer Rand */
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    background-color: #f8f8f8; /* Sehr heller grauer Input-Hintergrund */
+    color: #333; /* Dunkler Input-Text */
+}
 
-    // Initialen Zustand setzen (falls Checkboxes beim Laden schon unchecked sind)
-    document.getElementById('spieleranzahl').disabled = !document.getElementById('enable-spieleranzahl').checked;
-    document.getElementById('dauer').disabled = !document.getElementById('enable-dauer').checked;
-    document.getElementById('min-age').disabled = !document.getElementById('enable-min-age').checked;
-});
+input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+    border-color: #FFD700; /* Goldgelb bei Fokus */
+    outline: none;
+}
 
-// ERSETZE die alte Registrierungs-Funktion mit dieser:
-document.getElementById('register-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // Alle Daten aus dem Formular sammeln
-    const email = document.getElementById('register-email').value;
-    const password = document.getElementById('register-password').value;
-    const nickname = document.getElementById('register-nickname').value;
-    const region = document.getElementById('register-region').value;
-    const age = document.getElementById('register-age').value;
-    const favorite_game = document.getElementById('register-favorite-game').value;
+button[type="submit"] {
+    width: 100%;
+    padding: 0.65rem;
+    background-color: #FFD700; /* Goldgelb */
+    color: #333; /* Dunkler Text für gelben Button */
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-    // Den "Daten-Rucksack" (options.data) packen
-    const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-            data: {
-                nickname: nickname,
-                region: region,
-                alter: age, // Wichtig: wird als Text gespeichert, die Datenbank wandelt es um
-                favorite_game: favorite_game
-            }
-        }
-    });
+button[type="submit"]:hover {
+    background-color: #FFA500; /* Orange-Gelb für Hover */
+}
 
-    if (error) {
-        alert('Registrierung fehlgeschlagen: ' + error.message);
-        return;
-    }
+/* --- Neue Stile für dynamische Inhalte --- */
 
-    alert('Registrierung erfolgreich! Bitte prüfe deine E-Mails, um deinen Account zu bestätigen.');
-    e.target.reset();
-});
-// ... Login-Funktion (unverändert) ...
-document.getElementById('login-form').addEventListener('submit', async (e) => { e.preventDefault(); const email = document.getElementById('login-email').value; const password = document.getElementById('login-password').value; const { data, error } = await supabase.auth.signInWithPassword({ email, password }); if (error) { alert('Login fehlgeschlagen: ' + error.message); return; } document.getElementById('login-form').reset(); document.getElementById('register-form').reset(); });
+.filter-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.filter-group label {
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+.filter-group input[type="checkbox"] {
+    margin-right: 5px;
+    width: auto; /* Checkboxen nehmen nicht die volle Breite ein */
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.filter-group input[type="number"] {
+    flex-grow: 1; /* Eingabefeld füllt den restlichen Platz aus */
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* *** NEUE & ANGEPASSTE STILE FÜR DAS EMPFEHLUNGS-LAYOUT *** */
+
+.result-item {
+    border-bottom: 1px solid #eee;
+    padding: 0.5rem 0; /* Stark reduzierter Abstand zwischen den Spielen */
+}
+.result-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.game-title-link {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.1rem; /* Minimaler Abstand vom Titel zum Rest */
+}
+.game-title-link:hover {
+    text-decoration: underline;
+    color: #FFD700;
+}
+
+/* Flex-Container für Bild und Details */
+.result-item-content {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Blauen Rand bei verlinkten Bildern entfernen */
+.result-item-content a {
+    border: none;
+    text-decoration: none;
+}
+
+/* Bild-Styling */
+.game-image {
+    max-width: 150px;
+    height: auto;
+    display: block;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0;
+    flex-shrink: 0;
+}
+
+/* Container für die Text-Details */
+.result-item-details {
+    flex: 1;
+}
+
+.result-item-details p {
+    margin: 0 0 0.15rem 0; /* Minimaler Abstand zwischen den Textzeilen */
+    white-space: normal;
+}
+
+.result-item-details .action-button {
+    margin-top: 0.5rem; /* Stark reduzierter Abstand über dem Kauf-Button */
+}
+/* *** ENDE DER NEUEN STILE *** */
 
 
-// NEU: Gast-Login Funktion
-async function handleGuestLogin() {
-    const { data, error } = await supabase.auth.signInAnonymously();
-    if (error) {
-        alert('Gast-Login fehlgeschlagen: ' + error.message);
-        return;
-    }
-    // Nach erfolgreichem Gast-Login können wir optional ein Profil anlegen
-    // oder einfach die UI aktualisieren.
-    // Für dieses Beispiel aktualisieren wir nur die UI.
-    alert('Erfolgreich als Gast eingeloggt!');
-    // Die handleAuthChange Funktion wird durch onAuthStateChange aufgerufen
-    // und kümmert sich um die UI-Aktualisierung.
+.action-button {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-top: 8px;
+    margin-right: 8px;
+    background-color: #FFD700; /* Goldgelb */
+    color: #333; /* Dunkler Text */
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+}
+.action-button:hover {
+    background-color: #FFA500; /* Orange-Gelb für Hover */
+}
+
+.chat-button {
+    background-color: #e67e22; /* Orange */
+}
+.chat-button:hover {
+    background-color: #d35400; /* Dunkleres Orange */
+}
+
+.guest-button {
+    background-color: #ccc; /* Hellgrau für Gast-Login-Button */
+    color: #333;
+}
+.guest-button:hover {
+    background-color: #bbb;
 }
 
 
-// ... Ausloggen-Funktion (jetzt mit Postfach leeren) ...
-document.getElementById('logout-btn').addEventListener('click', async () => {
-    await supabase.auth.signOut();
-    document.getElementById('output-match').innerHTML = '';
-    document.getElementById('output-recommend').innerHTML = '';
-    // NEU: Postfach leeren beim Ausloggen
-    document.getElementById('inbox-notifications').innerHTML = '';
-});
-
-
-// ======================= ANFANG: AKTUALISIERTER CODEBLOCK =======================
-
-// Globale Variable, um die aktuellen Empfehlungen zu speichern
-let currentRecommendations = [];
-let frostedBlue = '#00adee'; // "Frosted hellblau"
-
-// KORRIGIERT: Hilfsfunktion, um Text-Komplexität in sortierbare Zahlen umzuwandeln
-function getComplexityValue(complexity) {
-    // Wandelt den numerischen Wert direkt in eine Zahl um
-    const value = parseFloat(complexity);
-    return isNaN(value) ? 99 : value;
+/* --- Stile für das Chat Modal --- */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Standard dunklerer Hintergrund */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
-// AKTUALISIERT: Funktion, die die Spiele-Liste im HTML darstellt
-function renderRecommendations(recommendations) {
-    const outputDiv = document.getElementById('output-recommend');
-    outputDiv.innerHTML = '<h3>Empfohlene Spiele:</h3><p><em>Tipp: Klicke auf den Titel eines Spiels für mehr Infos auf BoardGameGeek.</em></p>';
-
-    if (!recommendations || recommendations.length === 0) {
-        outputDiv.innerHTML += '<p>Keine passenden Empfehlungen gefunden.</p>';
-        return;
-    }
-
-    recommendations.forEach(r => {
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'result-item';
-
-        const isFrostedGame = r.Verlag === 'Frosted';
-        const buyButtonText = isFrostedGame ? 'Direkt bestellen' : 'Bei Amazon kaufen';
-        const buyButtonStyle = isFrostedGame ? `style="background-color: ${frostedBlue}; color: white;"` : '';
-
-        // Bild wird zu einem klickbaren Link
-        const imageHtml = `
-            <a href="${r.Buy}" target="_blank">
-                <img src="${r.image_url || 'https://via.placeholder.com/150?text=Kein+Bild'}" alt="Bild von ${r.spiel}" class="game-image">
-            </a>
-        `;
-
-        const descriptionHtml = r.description ? `<p>${r.description}</p>` : '';
-
-        // NEU: Logik für Spieleranzahl
-        let spieleranzahlText = 'N/A';
-        if (r.min_spieler && r.max_spieler) {
-            spieleranzahlText = r.min_spieler === r.max_spieler ? `${r.min_spieler}` : `${r.min_spieler} - ${r.max_spieler}`;
-        }
-
-        // NEU: Logik für Dauer
-        let dauerText = 'N/A';
-        if (r.min_dauer && r.max_dauer) {
-            dauerText = r.min_dauer === r.max_dauer ? `${r.min_dauer} Minuten` : `${r.min_dauer} - ${r.max_dauer} Minuten`;
-        }
-
-        itemDiv.innerHTML = `
-            <a href="${r.BGG}" target="_blank" class="game-title-link">${r.spiel}</a>
-            <div class="result-item-content">
-                ${imageHtml}
-                <div class="result-item-details">
-                    ${descriptionHtml}
-                    <p><strong>Autor:</strong> ${r.Autor || 'N/A'}</p>
-                    <p><strong>Spieler:</strong> ${spieleranzahlText}</p>
-                    <p><strong>Dauer:</strong> ${dauerText}</p>
-                    <p><strong>Komplexität (von 5):</strong> ${r.Komplexität || 'N/A'}</p>
-                    <a href="${r.Buy}" target="_blank" class="action-button" ${buyButtonStyle}>${buyButtonText}</a>
-                </div>
-            </div>
-        `;
-        outputDiv.appendChild(itemDiv);
-    });
+.modal-content {
+    background-color: #FFFFFF; /* Weißer Hintergrund für Modal */
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    height: 80%;
+    max-height: 600px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    color: #333; /* Dunkler Text im Modal */
 }
 
-// ANGEPASST: Event-Listener für das Empfehlungs-Formular
-document.getElementById('recommend-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const anzahl = parseInt(document.getElementById('spieleranzahl').value);
-    const dauer = parseInt(document.getElementById('dauer').value);
-    const minAge = parseInt(document.getElementById('min-age').value);
-
-    const enableAnzahl = document.getElementById('enable-spieleranzahl').checked;
-    const enableDauer = document.getElementById('enable-dauer').checked;
-    const enableMinAge = document.getElementById('enable-min-age').checked;
-
-    const outputDiv = document.getElementById('output-recommend');
-    const sortControls = document.getElementById('sort-controls');
-    
-    outputDiv.innerText = 'Suche nach Empfehlungen...';
-    sortControls.style.display = 'none'; 
-    document.querySelectorAll('#sort-controls button').forEach(btn => btn.classList.remove('active'));
-
-
-    // WICHTIG: Die Spalten für Spieler und Dauer mit abfragen!
-    let query = supabase.from('spielempfehlungen').select('*, min_spieler, max_spieler, min_dauer, max_dauer');
-
-    if (enableAnzahl && !isNaN(anzahl)) {
-        query = query.lte('min_spieler', anzahl).gte('max_spieler', anzahl);
-    }
-    if (enableDauer && !isNaN(dauer)) {
-        query = query.gte('max_dauer', dauer);
-    }
-    if (enableMinAge && !isNaN(minAge)) {
-        query = query.lte('Alter_min', minAge);
-    }
-
-    const { data: recommendations, error } = await query;
-
-    if (error) {
-        outputDiv.innerText = 'Fehler: ' + error.message;
-        return;
-    }
-    
-    // Empfehlungen sortieren: Frosted-Spiele nach oben
-    const sortedRecommendations = (recommendations || []).sort((a, b) => {
-        if (a.Verlag === 'Frosted' && b.Verlag !== 'Frosted') return -1;
-        if (a.Verlag !== 'Frosted' && b.Verlag === 'Frosted') return 1;
-        return 0;
-    });
-
-    currentRecommendations = sortedRecommendations;
-    
-    if (currentRecommendations.length > 0) {
-        sortControls.style.display = 'flex';
-    }
-    
-    renderRecommendations(currentRecommendations);
-});
-
-// Event-Listener für die Sortier-Buttons
-document.getElementById('sort-controls').addEventListener('click', (e) => {
-    if (!e.target.matches('button')) return;
-
-    const sortKey = e.target.dataset.sort;
-    const sortOrder = e.target.dataset.order;
-
-    document.querySelectorAll('#sort-controls button').forEach(btn => btn.classList.remove('active'));
-    e.target.classList.add('active');
-
-    currentRecommendations.sort((a, b) => {
-        let valA, valB;
-
-        switch (sortKey) {
-            case 'name':
-                valA = a.spiel.toLowerCase();
-                valB = b.spiel.toLowerCase();
-                break;
-            case 'duration':
-                valA = a.max_dauer || 0;
-                valB = b.max_dauer || 0;
-                break;
-            case 'complexity':
-                // KORRIGIERT: Die Funktion getComplexityValue wird hier verwendet
-                valA = getComplexityValue(a.Komplexität);
-                valB = getComplexityValue(b.Komplexität);
-                break;
-            default:
-                return 0;
-        }
-
-        if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
-        if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
-        return 0;
-    });
-    
-    renderRecommendations(currentRecommendations);
-});
-
-// ======================= ENDE: ÜBERARBEITETER CODEBLOCK =========================
-
-
-// ... Mitspieler finden (unverändert) ...
-document.getElementById('match-form').addEventListener('submit', async (e) => { e.preventDefault(); const region = document.getElementById('region').value; const spiel = document.getElementById('spiel').value; const outputDiv = document.getElementById('output-match'); const { data: { user } } = await supabase.auth.getUser(); if (!user) return; const { data: matches, error } = await supabase .from('profiles') .select('id, nickname, alter, region, favorite_game') .eq('region', region) .eq('favorite_game', spiel) .neq('id', user.id); if (error) { outputDiv.innerText = 'Fehler: ' + error.message; return; } if (matches.length === 0) { outputDiv.innerText = 'Keine passenden Mitspieler gefunden.'; } else { outputDiv.innerHTML = '<h3>Gefundene Mitspieler:</h3>'; matches.forEach(m => { const itemDiv = document.createElement('div'); itemDiv.className = 'result-item'; const text = document.createElement('p'); text.textContent = `${m.nickname} (Alter: ${m.alter}, Region: ${m.region})`; const chatBtn = document.createElement('button'); chatBtn.textContent = 'Chatten'; chatBtn.className = 'action-button chat-button'; chatBtn.dataset.receiverId = m.id; chatBtn.dataset.receiverNickname = m.nickname; chatBtn.onclick = () => openChat(m.id, m.nickname); itemDiv.appendChild(text); itemDiv.appendChild(chatBtn); outputDiv.appendChild(itemDiv); }); } });
-
-// --- CHAT FUNKTIONEN (mit "als gelesen markieren") ---
-
-async function openChat(receiverId, receiverNickname) {
-    const modal = document.getElementById('chat-modal');
-    const chatTitle = document.getElementById('chat-with-user');
-    const messagesDiv = document.getElementById('chat-messages');
-    
-    chatTitle.textContent = `Chat mit ${receiverNickname}`;
-    messagesDiv.innerHTML = 'Lade Nachrichten...';
-    modal.dataset.receiverId = receiverId;
-    modal.style.display = 'flex';
-
-    const { data: { user } } = await supabase.auth.getUser();
-    const senderId = user.id;
-
-    // Nachrichten als gelesen markieren
-    await supabase
-        .from('messages')
-        .update({ is_read: true })
-        .eq('receiver_id', senderId)
-        .eq('sender_id', receiverId);
-    
-    // Postfach aktualisieren
-    await checkForNewMessages();
-
-    // Nachrichten abrufen
-    const { data: messages, error } = await supabase
-        .from('messages')
-        .select('*')
-        // HIER IST DIE KORREKTUR: Die Klammern () wurden durch and() ersetzt
-        .or(`and(sender_id.eq.${senderId},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${senderId})`)
-        .order('created_at', { ascending: true });
-
-    if (error) {
-        // Dieser Fehler sollte jetzt nicht mehr auftreten
-        console.error("Fehler beim Laden des Chats:", error);
-        messagesDiv.innerText = 'Fehler beim Laden der Nachrichten.';
-        return;
-    }
-    
-    messagesDiv.innerHTML = '';
-    messages.forEach(msg => displayMessage(msg, senderId));
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-    // Subscription für neue Nachrichten
-    const channelName = `chat-${[senderId, receiverId].sort().join('-')}`;
-    if(chatSubscription) supabase.removeChannel(chatSubscription);
-    chatSubscription = supabase
-        .channel(channelName, { config: { broadcast: { self: true } } })
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
-            if ((payload.new.sender_id === senderId && payload.new.receiver_id === receiverId) ||
-                (payload.new.sender_id === receiverId && payload.new.receiver_id === senderId)) {
-                displayMessage(payload.new, senderId);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            }
-        })
-        .subscribe();
+.modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888; /* Standardgrau für Schließen-Button */
 }
 
-function displayMessage(message, currentUserId) {
-    const messagesDiv = document.getElementById('chat-messages');
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'chat-message';
-    msgDiv.textContent = message.content;
-    if (message.sender_id === currentUserId) {
-        msgDiv.classList.add('sent');
-    } else {
-        msgDiv.classList.add('received');
-    }
-    messagesDiv.appendChild(msgDiv);
+#chat-messages {
+    flex-grow: 1;
+    border: 1px solid #ddd; /* Hellerer Rand */
+    border-radius: 5px;
+    padding: 1rem;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f8f8; /* Sehr heller Hintergrund für Chat-Bereich */
 }
 
-function closeChat() {
-    document.getElementById('chat-modal').style.display = 'none';
-    if (chatSubscription) {
-        supabase.removeChannel(chatSubscription);
-        chatSubscription = null;
-    }
+#chat-form {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
 }
 
-// Nachricht senden
-document.getElementById('chat-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const chatInput = document.getElementById('chat-input');
-    const content = chatInput.value.trim();
-    if (!content) return;
+#chat-form input {
+    flex-grow: 1;
+    margin: 0 10px 0 0;
+}
 
-    const { data: { user } } = await supabase.auth.getUser();
-    const sender_id = user.id;
-    const receiver_id = document.getElementById('chat-modal').dataset.receiverId;
+#chat-form button {
+    width: auto;
+    background-color: #FFD700; /* Goldgelb */
+    color: #333; /* Dunkler Text */
+}
 
-    const { error } = await supabase.from('messages').insert({
-        sender_id,
-        receiver_id,
-        content
-    });
+#chat-form button:hover {
+    background-color: #FFA500; /* Orange-Gelb für Hover */
+}
 
-    if (error) {
-        console.error('Supabase INSERT Error:', error);
-        alert('Fehler beim Senden der Nachricht: ' + error.message);
-    } else {
-        chatInput.value = '';
-    }
-});
+.chat-message {
+    padding: 8px 12px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
 
-// KI-SPIELE-GENERATOR
-document.getElementById('ai-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
+.sent {
+    background-color: #FFD700; /* Goldgelb für gesendete Nachrichten */
+    color: #333; /* Dunkler Text */
+    align-self: flex-end;
+    border-bottom-right-radius: 3px;
+}
 
-    const equipmentInput = document.getElementById('equipment-input').value;
-    const outputDiv = document.getElementById('ai-output');
-    const loadingDiv = document.getElementById('ai-loading');
-    const resultDiv = document.getElementById('ai-result');
+.received {
+    background-color: #ecf0f1; /* Heller Grau-Ton für empfangene Nachrichten */
+    color: #333; /* Dunkler Text */
+    align-self: flex-start;
+    border-bottom-left-radius: 3px;
+}
+
+/* --- Stile für das Postfach --- */
+#inbox-notifications {
+    background-color: #fffacd; /* Hellgelb (Lemon Chiffon) */
+    border: 1px solid #FFD700; /* Goldgelber Rand */
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    color: #333; /* Dunkler Text */
+}
+
+#inbox-notifications h4 {
+    margin-top: 0;
+    color: #333; /* Dunkler Text */
+}
+
+#inbox-notifications ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#inbox-notifications li {
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#inbox-notifications li:hover {
+    background-color: #fff5be; /* Etwas dunkleres Hellgelb für Hover */
+}
+
+/* ======================= ANFANG: AKTUALISIERTER CODE ======================= */
+/* --- Stile für Sortier-Buttons (Version 2.0 - Minimalistisch) --- */
+#sort-controls {
+    max-width: 700px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4px 16px;
+    margin: -1rem auto 0.5rem auto; /* Reduzierter Abstand nach unten */
+    padding: 0 2rem;
+}
+
+#sort-controls span {
+    font-weight: 600;
+    margin-right: 8px;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+#sort-controls button {
+    /* Button-Optik komplett zurücksetzen */
+    background: none;
+    border: none;
+    border-radius: 0;
+
+    /* Eine Linie unten für den Hover/Aktiv-Effekt vorbereiten */
+    border-bottom: 2px solid transparent;
     
-    outputDiv.style.display = 'block';
-    loadingDiv.style.display = 'block';
-    resultDiv.innerHTML = '';
+    padding: 6px 2px; /* Etwas Luft nach oben/unten */
+    margin: 0;
+    
+    /* Text-Stil */
+    color: #555; /* Weicheres Grau für inaktive Elemente */
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
 
-    try {
-        const { data, error } = await supabase.functions.invoke('generate-game-idea', {
-            body: { equipment: equipmentInput },
-        });
+    /* Sanfter Übergang */
+    transition: all 0.2s ease-in-out;
+}
 
-        if (error) {
-            throw error;
-        }
+#sort-controls button:hover {
+    color: #000;
+    border-bottom-color: #ccc; /* Graue Linie beim Hover */
+}
 
-        // Die Markdown-Antwort der KI in HTML umwandeln und anzeigen
-        resultDiv.innerHTML = marked.parse(data.gameIdea);
-
-    } catch (error) {
-        resultDiv.innerHTML = `<p style="color: red;"><strong>Fehler:</strong> ${error.message}</p>`;
-    } finally {
-        loadingDiv.style.display = 'none';
-    }
-});
+#sort-controls button.active {
+    color: #333;
+    font-weight: 700; /* Fett für aktive Auswahl */
+    border-bottom-color: #FFD700; /* Goldene Linie, passend zum Theme */
+}
+/* ======================= ENDE: AKTUALISIERTER CODE ========================= */

@@ -185,11 +185,10 @@ document.getElementById('logout-btn').addEventListener('click', async () => {
 });
 
 
-// ======================= ANFANG: AKTUALISIERTER SPIELEMPFEHLUNGS-CODE =======================
+// ======================= ANFANG: ÜBERARBEITETER CODEBLOCK =======================
 
-// GEÄNDERT: Zwei globale Variablen zum Speichern der Listen
-let originalRecommendations = []; // Speichert die unveränderte Originalliste
-let currentRecommendations = [];  // Speichert die Liste, die sortiert und angezeigt wird
+// Globale Variable, um die aktuellen Empfehlungen zu speichern
+let currentRecommendations = [];
 
 // Hilfsfunktion, um Text-Komplexität in sortierbare Zahlen umzuwandeln
 function getComplexityValue(complexity) {
@@ -204,7 +203,7 @@ function getComplexityValue(complexity) {
     return complexityMap[String(complexity).toLowerCase()] || 99; // Unbekannte Werte ans Ende
 }
 
-// Funktion, die die Spiele-Liste im HTML darstellt (unverändert)
+// NEU: Funktion, die die Spiele-Liste im HTML darstellt
 function renderRecommendations(recommendations) {
     const outputDiv = document.getElementById('output-recommend');
     outputDiv.innerHTML = '<h3>Empfohlene Spiele:</h3>'; // Container leeren und Überschrift setzen
@@ -241,7 +240,7 @@ function renderRecommendations(recommendations) {
     });
 }
 
-// Event-Listener für das Empfehlungs-Formular (unverändert)
+// ANGEPASST: Event-Listener für das Empfehlungs-Formular
 document.getElementById('recommend-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -278,75 +277,61 @@ document.getElementById('recommend-form').addEventListener('submit', async (e) =
         return;
     }
     
-    // GEÄNDERT: Beide Listen mit den neuen Ergebnissen füllen
-    originalRecommendations = recommendations || [];
-    currentRecommendations = [...originalRecommendations]; // Eine bearbeitbare Kopie erstellen
+    // Empfehlungen in der globalen Variable speichern
+    currentRecommendations = recommendations || [];
     
     // Sortier-Buttons nur anzeigen, wenn Ergebnisse vorhanden sind
-    document.querySelectorAll('#sort-controls button').forEach(btn => btn.classList.remove('active'));
     if (currentRecommendations.length > 0) {
         sortControls.style.display = 'flex';
     }
     
-    // Ergebnisse zum ersten Mal rendern
+    // Ergebnisse zum ersten Mal rendern (unsortiert)
     renderRecommendations(currentRecommendations);
 });
 
-// GEÄNDERT: Event-Listener für die Sortier-Buttons mit Toggle-Funktion
+// NEU: Event-Listener für die Sortier-Buttons
 document.getElementById('sort-controls').addEventListener('click', (e) => {
     // Nur reagieren, wenn ein Button geklickt wurde
     if (!e.target.matches('button')) return;
 
-    const clickedButton = e.target;
-    const isAlreadyActive = clickedButton.classList.contains('active');
+    const sortKey = e.target.dataset.sort;
+    const sortOrder = e.target.dataset.order;
 
-    // Zuerst alle Buttons deaktivieren
+    // Aktive-Klasse für visuellen Hinweis setzen
     document.querySelectorAll('#sort-controls button').forEach(btn => btn.classList.remove('active'));
+    e.target.classList.add('active');
 
-    if (isAlreadyActive) {
-        // --- FALL 1: Button war bereits aktiv ---
-        // Sortierung wird aufgehoben, indem die ursprüngliche Reihenfolge wiederhergestellt wird.
-        currentRecommendations = [...originalRecommendations];
-        renderRecommendations(currentRecommendations);
-    } else {
-        // --- FALL 2: Ein neuer Button wird aktiviert ---
-        clickedButton.classList.add('active'); // Nur den geklickten Button aktivieren
+    // Die Liste sortieren
+    currentRecommendations.sort((a, b) => {
+        let valA, valB;
 
-        const sortKey = clickedButton.dataset.sort;
-        const sortOrder = clickedButton.dataset.order;
+        switch (sortKey) {
+            case 'name':
+                valA = a.spiel.toLowerCase();
+                valB = b.spiel.toLowerCase();
+                break;
+            case 'duration':
+                valA = a.max_dauer || 0;
+                valB = b.max_dauer || 0;
+                break;
+            case 'complexity':
+                valA = getComplexityValue(a.Komplexität);
+                valB = getComplexityValue(b.Komplexität);
+                break;
+            default:
+                return 0;
+        }
 
-        // Die Liste sortieren
-        currentRecommendations.sort((a, b) => {
-            let valA, valB;
-
-            switch (sortKey) {
-                case 'name':
-                    valA = (a.spiel || '').toLowerCase();
-                    valB = (b.spiel || '').toLowerCase();
-                    break;
-                case 'duration':
-                    valA = a.max_dauer || 0;
-                    valB = b.max_dauer || 0;
-                    break;
-                case 'complexity':
-                    valA = getComplexityValue(a.Komplexität);
-                    valB = getComplexityValue(b.Komplexität);
-                    break;
-                default:
-                    return 0;
-            }
-
-            if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
-            if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
-            return 0;
-        });
-        
-        // Liste neu mit der sortierten Reihenfolge rendern
-        renderRecommendations(currentRecommendations);
-    }
+        if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+        if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+        return 0;
+    });
+    
+    // Liste neu mit der sortierten Reihenfolge rendern
+    renderRecommendations(currentRecommendations);
 });
 
-// ======================= ENDE: AKTUALISIERTER SPIELEMPFEHLUNGS-CODE =========================
+// ======================= ENDE: ÜBERARBEITETER CODEBLOCK =========================
 
 
 // ... Mitspieler finden (unverändert) ...
@@ -416,5 +401,75 @@ function displayMessage(message, currentUserId) {
     const msgDiv = document.createElement('div');
     msgDiv.className = 'chat-message';
     msgDiv.textContent = message.content;
-    if (message.
-        
+    if (message.sender_id === currentUserId) {
+        msgDiv.classList.add('sent');
+    } else {
+        msgDiv.classList.add('received');
+    }
+    messagesDiv.appendChild(msgDiv);
+}
+
+function closeChat() {
+    document.getElementById('chat-modal').style.display = 'none';
+    if (chatSubscription) {
+        supabase.removeChannel(chatSubscription);
+        chatSubscription = null;
+    }
+}
+
+// Nachricht senden
+document.getElementById('chat-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const chatInput = document.getElementById('chat-input');
+    const content = chatInput.value.trim();
+    if (!content) return;
+
+    const { data: { user } } = await supabase.auth.getUser();
+    const sender_id = user.id;
+    const receiver_id = document.getElementById('chat-modal').dataset.receiverId;
+
+    const { error } = await supabase.from('messages').insert({
+        sender_id,
+        receiver_id,
+        content
+    });
+
+    if (error) {
+        console.error('Supabase INSERT Error:', error);
+        alert('Fehler beim Senden der Nachricht: ' + error.message);
+    } else {
+        chatInput.value = '';
+    }
+});
+
+// KI-SPIELE-GENERATOR
+document.getElementById('ai-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const equipmentInput = document.getElementById('equipment-input').value;
+    const outputDiv = document.getElementById('ai-output');
+    const loadingDiv = document.getElementById('ai-loading');
+    const resultDiv = document.getElementById('ai-result');
+    
+    outputDiv.style.display = 'block';
+    loadingDiv.style.display = 'block';
+    resultDiv.innerHTML = '';
+
+    try {
+        const { data, error } = await supabase.functions.invoke('generate-game-idea', {
+            body: { equipment: equipmentInput },
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        // Die Markdown-Antwort der KI in HTML umwandeln und anzeigen
+        resultDiv.innerHTML = marked.parse(data.gameIdea);
+
+    } catch (error) {
+        resultDiv.innerHTML = `<p style="color: red;"><strong>Fehler:</strong> ${error.message}</p>`;
+    } finally {
+        loadingDiv.style.display = 'none';
+    }
+});

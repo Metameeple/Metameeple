@@ -33,6 +33,16 @@
         </div>
         <button type="submit">Empfehlen</button>
     </form>
+
+    <div id="sort-controls" style="display: none;">
+        <span>Sortieren nach:</span>
+        <button data-sort="name" data-order="asc">Name ▲</button>
+        <button data-sort="name" data-order="desc">Name ▼</button>
+        <button data-sort="duration" data-order="asc">Dauer ▲</button>
+        <button data-sort="duration" data-order="desc">Dauer ▼</button>
+        <button data-sort="complexity" data-order="asc">Komplexität ▲</button>
+        <button data-sort="complexity" data-order="desc">Komplexität ▼</button>
+    </div>
     <div id="output-recommend" class="output-container"></div>
 
     <button id="show-auth-btn" class="action-button guest-button" style="margin-top: 20px;">

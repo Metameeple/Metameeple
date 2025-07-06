@@ -157,7 +157,7 @@ button[type="submit"]:hover {
     color: #333;
     text-decoration: none;
     display: block;
-    margin-bottom: 0.4rem; /* Stark reduzierter Abstand vom Titel zum Bild */
+    margin-bottom: 0.1rem; /* Minimaler Abstand vom Titel zum Rest */
 }
 .game-title-link:hover {
     text-decoration: underline;

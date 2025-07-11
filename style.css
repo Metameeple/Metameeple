@@ -428,6 +428,7 @@ button[type="submit"]:hover {
 }
 /* ======================= ENDE: AKTUALISIERTER CODE ========================= */
 
+/* --- Stile für den Footer --- */
 footer {
     margin-top: 40px; /* Abstand zum Rest der Seite */
     padding: 20px;
@@ -441,9 +442,10 @@ footer p {
     font-size: 0.9rem;
 }
 
+/* KORRIGIERTER BLOCK FÜR DAS LOGO */
 #frosted-logo {
-    max-width: 150px; /* Logo-Größe begrenzen */
-    height: auto;
+    width: 150px; /* Feste Breite von 150px erzwingen */
+    height: auto; /* Höhe passt sich proportional an */
     transition: transform 0.2s ease-in-out;
 }
 

@@ -444,7 +444,7 @@ footer p {
 
 /* KORRIGIERTER BLOCK FÜR DAS LOGO */
 #frosted-logo {
-    width: 150px; /* Feste Breite von 150px erzwingen */
+    width: 50px; /* Feste Breite von 150px erzwingen */
     height: auto; /* Höhe passt sich proportional an */
     transition: transform 0.2s ease-in-out;
 }

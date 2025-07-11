@@ -2,117 +2,297 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brettspiel Community</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Tailwind CSS CDN for basic styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the app */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        input[type="email"],
+        input[type="password"],
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .output-container {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        .info-text {
+            color: #555;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .filter-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .filter-group label {
+            margin-right: 10px;
+            min-width: 150px; /* Adjust as needed */
+        }
+        .filter-group input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        #sort-controls button {
+            margin-right: 5px;
+            background-color: #6c757d;
+        }
+        #sort-controls button:hover {
+            background-color: #5a6268;
+        }
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+        #chat-messages {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        #chat-messages div {
+            margin-bottom: 5px;
+        }
+        #chat-messages .own-message {
+            text-align: right;
+            color: #007bff;
+        }
+        #chat-messages .other-message {
+            text-align: left;
+            color: #28a745;
+        }
+        #inbox-notifications {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 5px;
+            color: #856404;
+        }
+        .guest-button {
+            background-color: #f0ad4e;
+        }
+        .guest-button:hover {
+            background-color: #ec971f;
+        }
+        /* Styling for the Frosted Games footer */
+        #footer-supported-by {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #777;
+        }
+        #footer-supported-by a {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            transition: opacity 0.3s ease;
+        }
+        #footer-supported-by a:hover {
+            opacity: 0.8;
+        }
+        #footer-supported-by img {
+            height: 40px; /* Adjust size as needed */
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
     <h1>Brettspiel Community</h1>
-    <img src="logo.png" alt="Logo" style="width: 150px;" />
+    <img src="https://placehold.co/150x150/e0e0e0/000000?text=Logo" alt="Logo" style="width: 150px; border-radius: 8px;" />
 
-    <div id="logout-button-container">
-        <button id="logout-btn">Ausloggen</button>
+    <div id="logout-button-container" class="mt-4">
+        <button id="logout-btn" class="rounded-md">Ausloggen</button>
     </div>
 
-    <h3 style="margin-top: 40px;">Spiel empfehlen lassen</h3>
-    <form id="recommend-form">
+    <h3 class="mt-10 text-xl font-semibold">Spiel empfehlen lassen</h3>
+    <form id="recommend-form" class="rounded-lg">
         <div class="filter-group">
-            <input type="checkbox" id="enable-spieleranzahl" checked>
+            <input type="checkbox" id="enable-spieleranzahl" checked class="rounded">
             <label for="enable-spieleranzahl">Spieleranzahl:</label>
-            <input type="number" id="spieleranzahl" placeholder="Spieleranzahl" />
+            <input type="number" id="spieleranzahl" placeholder="Spieleranzahl" class="rounded-md" />
         </div>
         <div class="filter-group">
-            <input type="checkbox" id="enable-dauer" checked>
+            <input type="checkbox" id="enable-dauer" checked class="rounded">
             <label for="enable-dauer">Max. Dauer (Minuten):</label>
-            <input type="number" id="dauer" placeholder="Max. Dauer in Minuten" />
+            <input type="number" id="dauer" placeholder="Max. Dauer in Minuten" class="rounded-md" />
         </div>
         <div class="filter-group">
-            <input type="checkbox" id="enable-min-age" checked>
+            <input type="checkbox" id="enable-min-age" checked class="rounded">
             <label for="enable-min-age">Mindestalter:</label>
-            <input type="number" id="min-age" placeholder="Mindestalter" />
+            <input type="number" id="min-age" placeholder="Mindestalter" class="rounded-md" />
         </div>
-        <button type="submit">Empfehlen</button>
+        <button type="submit" class="rounded-md">Empfehlen</button>
     </form>
 
-    <div id="sort-controls" style="display: none;">
-        <span>Sortieren nach:</span>
-        <button data-sort="name" data-order="asc">Name ▲</button>
-        <button data-sort="name" data-order="desc">Name ▼</button>
-        <button data-sort="duration" data-order="asc">Dauer ▲</button>
-        <button data-sort="duration" data-order="desc">Dauer ▼</button>
-        <button data-sort="complexity" data-order="asc">Komplexität ▲</button>
-        <button data-sort="complexity" data-order="desc">Komplexität ▼</button>
+    <div id="sort-controls" style="display: none;" class="mt-4">
+        <span class="mr-2">Sortieren nach:</span>
+        <button data-sort="name" data-order="asc" class="rounded-md">Name ▲</button>
+        <button data-sort="name" data-order="desc" class="rounded-md">Name ▼</button>
+        <button data-sort="duration" data-order="asc" class="rounded-md">Dauer ▲</button>
+        <button data-sort="duration" data-order="desc" class="rounded-md">Dauer ▼</button>
+        <button data-sort="complexity" data-order="asc" class="rounded-md">Komplexität ▲</button>
+        <button data-sort="complexity" data-order="desc" class="rounded-md">Komplexität ▼</button>
     </div>
     
     <p id="info-text" class="info-text" style="display: none;">
         <em>Tipp: Klicke auf den Spieletitel für weitere Details auf BoardGameGeek.</em>
     </p>
-    <div id="output-recommend" class="output-container"></div>
+    <div id="output-recommend" class="output-container rounded-lg"></div>
 
-    <button id="show-auth-btn" class="action-button guest-button" style="margin-top: 20px;">
+    <button id="show-auth-btn" class="action-button guest-button rounded-md mt-5">
         Für Mitspielersuche oder KI-Generator bitte einloggen oder Registrieren
     </button>
 
-    <div id="auth-section" style="display: none;">
-        <form id="register-form">
-            <h2>Registrieren</h2>
-            <input type="email" id="register-email" placeholder="E-Mail" required />
-            <input type="password" id="register-password" placeholder="Passwort" required />
-            <input type="text" id="register-nickname" placeholder="Nickname (öffentlich sichtbar)" required />
-            <input type="number" id="register-age" placeholder="Dein Alter" required />
-            <input type="text" id="register-region" placeholder="Region" required />
-            <input type="text" id="register-favorite-game" placeholder="Lieblingsspiel" required />
-            <button type="submit">Registrieren</button>
-            <button type="button" id="guest-login-btn" class="action-button guest-button" style="margin-top: 10px;">Als Gast fortfahren</button>
+    <div id="auth-section" style="display: none;" class="mt-5">
+        <form id="register-form" class="rounded-lg">
+            <h2 class="text-lg font-semibold">Registrieren</h2>
+            <input type="email" id="register-email" placeholder="E-Mail" required class="rounded-md" />
+            <input type="password" id="register-password" placeholder="Passwort" required class="rounded-md" />
+            <input type="text" id="register-nickname" placeholder="Nickname (öffentlich sichtbar)" required class="rounded-md" />
+            <input type="number" id="register-age" placeholder="Dein Alter" required class="rounded-md" />
+            <input type="text" id="register-region" placeholder="Region" required class="rounded-md" />
+            <input type="text" id="register-favorite-game" placeholder="Lieblingsspiel" required class="rounded-md" />
+            <button type="submit" class="rounded-md">Registrieren</button>
+            <button type="button" id="guest-login-btn" class="action-button guest-button rounded-md mt-2">Als Gast fortfahren</button>
         </form>
 
-        <form id="login-form" style="margin-top: 20px;">
-            <h2>Login</h2>
-            <input type="email" id="login-email" placeholder="E-Mail" required />
-            <input type="password" id="login-password" placeholder="Passwort" required />
-            <button type="submit">Login</button>
+        <form id="login-form" class="mt-5 rounded-lg">
+            <h2 class="text-lg font-semibold">Login</h2>
+            <input type="email" id="login-email" placeholder="E-Mail" required class="rounded-md" />
+            <input type="password" id="login-password" placeholder="Passwort" required class="rounded-md" />
+            <button type="submit" class="rounded-md">Login</button>
         </form>
     </div>
 
-    <div id="app" style="display: none; margin-top: 20px;">
-       
-        <h3 style="margin-top: 40px;">KI-Spiele-Generator</h3>
+    <div id="app" style="display: none;" class="mt-5">
         
-        <form id="ai-form">
-            <label for="equipment-input">Welches Spielmaterial hast du?</label>
+        <h3 class="mt-10 text-xl font-semibold">KI-Spiele-Generator</h3>
+        
+        <form id="ai-form" class="rounded-lg">
+            <label for="equipment-input" class="block mb-2">Welches Spielmaterial hast du?</label>
             <textarea 
                 id="equipment-input" 
                 rows="4" 
                 placeholder="z.B. 6 Würfel, 1 Satz Spielkarten, 50 Münzen, 1 leeres Blatt Papier..."
-                required></textarea>
-            <button type="submit">Vorschlag generieren</button>
+                required class="rounded-md"></textarea>
+            <button type="submit" class="rounded-md">Vorschlag generieren</button>
         </form>
-        <div id="ai-output" class="output-container" style="display: none;">
+        <div id="ai-output" class="output-container rounded-lg" style="display: none;">
             <div id="ai-loading" style="display: none;">Generiere kreative Ideen... 🧠</div>
             <div id="ai-result"></div>
         </div>
 
-        <div id="inbox-notifications"></div>
+        <div id="inbox-notifications" class="rounded-md"></div>
         
-        <h3 style="margin-top: 40px;">Mitspieler finden</h3>
-        <form id="match-form">
-            <input type="text" id="region" placeholder="Region" required />
-            <input type="text" id="spiel" placeholder="Brettspiel" required />
-            <button type="submit">Suchen</button>
+        <h3 class="mt-10 text-xl font-semibold">Mitspieler finden</h3>
+        <form id="match-form" class="rounded-lg">
+            <input type="text" id="region" placeholder="Region" required class="rounded-md" />
+            <input type="text" id="spiel" placeholder="Brettspiel" required class="rounded-md" />
+            <button type="submit" class="rounded-md">Suchen</button>
         </form>
-        <div id="output-match" class="output-container"></div>
+        <div id="output-match" class="output-container rounded-lg"></div>
     </div>
 
     <div id="chat-modal" class="modal-backdrop" style="display: none;">
-        <div class="modal-content">
-            <button id="chat-close-btn" class="modal-close-btn">&times;</button>
-            <h3 id="chat-with-user">Chat</h3>
-            <div id="chat-messages"></div>
+        <div class="modal-content rounded-lg">
+            <button id="chat-close-btn" class="modal-close-btn rounded-full">&times;</button>
+            <h3 id="chat-with-user" class="text-lg font-semibold">Chat</h3>
+            <div id="chat-messages" class="rounded-md"></div>
             <form id="chat-form">
-                <input type="text" id="chat-input" placeholder="Nachricht schreiben..." autocomplete="off" required />
-                <button type="submit">Senden</button>
+                <input type="text" id="chat-input" placeholder="Nachricht schreiben..." autocomplete="off" required class="rounded-md" />
+                <button type="submit" class="rounded-md">Senden</button>
             </form>
         </div>
+    </div>
+
+    <!-- Supported by Frosted Games section -->
+    <div id="footer-supported-by">
+        <a href="https://frostedgames.de" target="_blank" rel="noopener noreferrer">
+            <img src="FrostedGames_Logo.png" alt="Frosted Games Logo" />
+            <span>Supported by: Frosted Games</span>
+        </a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
